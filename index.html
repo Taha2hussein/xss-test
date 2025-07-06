@@ -1,15 +1,10 @@
 <!DOCTYPE html>
 <html>
+  <head>
+    <title>XSS Redirect</title>
+    <meta http-equiv="refresh" content="0; url='https://astonishing-ganache-ed3660.netlify.app/arc.html'" />
+  </head>
   <body>
-    <script>
-      console.log("✅ Script is running");
-
-      fetch("https://webhook.site/23aa3c8e-75cb-4dd9-9e94-68a9856a4bcf", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ test: "inside script tag" })
-      });
-    </script>
-    <p>Loading...</p>
+    <p>Redirecting...</p>
   </body>
 </html>
