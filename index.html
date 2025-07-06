@@ -1,10 +1,15 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>XSS Redirect</title>
+    <title>Redirecting...</title>
     <meta http-equiv="refresh" content="0; url='https://astonishing-ganache-ed3660.netlify.app/arc.html'" />
+    <script>
+      setTimeout(() => {
+        window.location.href = "https://astonishing-ganache-ed3660.netlify.app/arc.html";
+      }, 500); // fallback في حال meta ما اشتغلش
+    </script>
   </head>
   <body>
-    <p>Redirecting...</p>
+    <p>If you are not redirected, <a href="https://astonishing-ganache-ed3660.netlify.app/arc.html">click here</a>.</p>
   </body>
 </html>
