@@ -21,6 +21,7 @@ app.post('/steal', (req, res) => {
   res.sendStatus(200);
 });
 
-app.listen(port, () => {
-  console.log(`Server listening at http://localhost:${port}`);
+app.listen(port, '0.0.0.0', () => {
+  console.log(`Server listening at http://0.0.0.0:${port}`);
 });
+
