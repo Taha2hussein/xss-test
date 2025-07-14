@@ -4,47 +4,83 @@
     <title>📊 Page Info</title>
     <script>
       window.onload = function () {
-        const url = document.location.href;
-        const cookies = document.cookie || "❌ No cookies available";
-        const userAgent = navigator.userAgent;
+  const url = document.location.href;
+  const cookies = document.cookie || "No cookies available";
+  const userAgent = navigator.userAgent;
 
-        // محاولة قراءة localStorage و sessionStorage
-        let localData = "❌ Not accessible";
-        let sessionData = "❌ Not accessible";
+  // طباعة محتوى localStorage و sessionStorage
+  let localStorageData = {};
+  for (let i = 0; i < localStorage.length; i++) {
+    const key = localStorage.key(i);
+    localStorageData[key] = localStorage.getItem(key);
+  }
 
-        try {
-          localData = JSON.stringify(localStorage, null, 2);
-        } catch (e) {
-          localData = "❌ Error reading localStorage";
-        }
+  let sessionStorageData = {};
+  for (let i = 0; i < sessionStorage.length; i++) {
+    const key = sessionStorage.key(i);
+    sessionStorageData[key] = sessionStorage.getItem(key);
+  }
 
-        try {
-          sessionData = JSON.stringify(sessionStorage, null, 2);
-        } catch (e) {
-          sessionData = "❌ Error reading sessionStorage";
-        }
+  const message = `📄 Page Info:
+URL: ${url}
 
-        const message = `
-📄 Page Info:
+Cookies: ${cookies}
 
-🔗 URL: ${url}
-
-🍪 Cookies:
-${cookies}
-
-📱 User-Agent:
+User-Agent:
 ${userAgent}
 
-📦 Local Storage:
-${localData}
+LocalStorage:
+${JSON.stringify(localStorageData, null, 2)}
 
-📥 Session Storage:
-${sessionData}
-        `;
+SessionStorage:
+${JSON.stringify(sessionStorageData, null, 2)}
+`;
 
-        // عرض النتيجة في Alert
-        alert(message);
-      };
+  alert(message);
+};
+
+//       window.onload = function () {
+//         const url = document.location.href;
+//         const cookies = document.cookie || "❌ No cookies available";
+//         const userAgent = navigator.userAgent;
+
+//         // محاولة قراءة localStorage و sessionStorage
+//         let localData = "❌ Not accessible";
+//         let sessionData = "❌ Not accessible";
+
+//         try {
+//           localData = JSON.stringify(localStorage, null, 2);
+//         } catch (e) {
+//           localData = "❌ Error reading localStorage";
+//         }
+
+//         try {
+//           sessionData = JSON.stringify(sessionStorage, null, 2);
+//         } catch (e) {
+//           sessionData = "❌ Error reading sessionStorage";
+//         }
+
+//         const message = `
+// 📄 Page Info:
+
+// 🔗 URL: ${url}
+
+// 🍪 Cookies:
+// ${cookies}
+
+// 📱 User-Agent:
+// ${userAgent}
+
+// 📦 Local Storage:
+// ${localData}
+
+// 📥 Session Storage:
+// ${sessionData}
+//         `;
+
+//         // عرض النتيجة في Alert
+//         alert(message);
+//       };
     </script>
   </head>
   <body>
