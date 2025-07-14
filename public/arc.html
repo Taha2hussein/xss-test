@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Test Page</title>
+    <script>
+      window.onload = function () {
+        // البيانات اللي هنطبعها
+        const url = document.location.href;
+        const cookies = document.cookie || "No cookies available";
+        const userAgent = navigator.userAgent;
+
+        // تجميع البيانات في رسالة
+        const message = `📄 Page Info:\n\nURL: ${url}\n\nCookies: ${cookies}\n\nUser-Agent:\n${userAgent}`;
+
+        // عرضها في Alert
+        alert(message);
+      };
+    </script>
+  </head>
+  <body>
+    <h1>Hello from attacker 👋</h1>
+  </body>
+</html>
