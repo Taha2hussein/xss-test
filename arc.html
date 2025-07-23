@@ -7,14 +7,22 @@
 <pre id="result"></pre>
 
 <script>
-document.querySelector('زرار_الحفظ').addEventListener('click', function(event) {
-    // هنا هتكتب الكود اللي عايز تنفذه عند الضغط
-    // مثلاً، سرقة الكوكيز أو استخراج التوكن من الـ LocalStorage أو من عناصر الصفحة
-    let token = document.cookie; // أو localStorage.getItem('token') لو مخزن هناك
-    // أو أي بيانات تانية تقدر تجيبها
-    alert('Token or data captured: ' + token);
-    
-});
+document.addEventListener("click", function(event) {
+  let el = event.target;
+
+  // لو العنصر نفسه مش زرار، طلع لأقرب زرار (button أو a أو input submit)
+  while (el && !["BUTTON", "A", "INPUT"].includes(el.tagName)) {
+    el = el.parentElement;
+  }
+
+  if (el) {
+    // خد النص أو الـ value حسب نوع العنصر
+    let label = el.innerText || el.value || el.getAttribute("aria-label") || "Unknown Button";
+
+    alert("You clicked on: " + label);
+  }
+}, true);
+
 
 </script>
 </body>
