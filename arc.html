@@ -4,19 +4,27 @@
   <title>Bridge Scanner</title>
 </head>
 <body>
-  <h1>جاري فحص الجسور ...</h1>
+  <h1>🔍 فحص الجسور ...</h1>
+  <div id="result" style="font-family: monospace;"></div>
 
   <script>
-    // كود الجافاسكريبت هنا
-    console.log("🔍 جسور متاحة:");
-    console.log(window.webkit?.messageHandlers);
+    const output = document.getElementById("result");
+    let logs = [];
+
+    function log(msg) {
+      logs.push(msg);
+      output.innerHTML += msg + "<br>";
+    }
+
+    log("🔍 جسور متاحة:");
+    log(JSON.stringify(window.webkit?.messageHandlers ?? "❌ لا يوجد window.webkit"));
 
     if (window.webkit?.messageHandlers) {
       Object.keys(window.webkit.messageHandlers).forEach(name => {
-        console.log("📡 Bridge Detected:", name);
+        log("📡 تم اكتشاف الجسر: " + name);
       });
     } else {
-      console.log("❌ لا يوجد جسور واضحة");
+      log("❌ لا يوجد جسور واضحة");
     }
 
     const guessNames = [
@@ -27,11 +35,16 @@
     guessNames.forEach(name => {
       try {
         window.webkit.messageHandlers[name].postMessage("probe");
-        console.log("🧪 جربنا الجسر:", name);
+        log("🧪 تم تجربة الجسر: " + name);
       } catch (e) {
-        console.log("❌ مفيش جسر بالاسم:", name);
+        log("❌ لا يوجد جسر بالاسم: " + name);
       }
     });
+
+    // أضف تنبيه نهائي بالمخرجات
+    setTimeout(() => {
+      alert("📋 النتائج:\n\n" + logs.join("\n"));
+    }, 1500);
   </script>
 </body>
 </html>
