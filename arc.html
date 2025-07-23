@@ -1,29 +1,14 @@
-<!DOCTYPE html>
 <html>
-<head><title>Test Fetch</title></head>
 <body>
-<h2>Testing fetch in WebView</h2>
-<button onclick="testFetch()">اجرب جلب بيانات</button>
-<pre id="result"></pre>
-
 <script>
-document.addEventListener("click", function(event) {
-  let el = event.target;
-
-  // لو العنصر نفسه مش زرار، طلع لأقرب زرار (button أو a أو input submit)
-  while (el && !["BUTTON", "A", "INPUT"].includes(el.tagName)) {
-    el = el.parentElement;
-  }
-
-  if (el) {
-    // خد النص أو الـ value حسب نوع العنصر
-    let label = el.innerText || el.value || el.getAttribute("aria-label") || "Unknown Button";
-
-    alert("You clicked on: " + label);
-  }
-}, true);
-
-
+  fetch("https://api.pinterest.com/v3/users/me/")
+    .then(response => response.json())
+    .then(data => {
+      alert("User data:\n" + JSON.stringify(data, null, 2));
+    })
+    .catch(error => {
+      alert("Error fetching user data: " + error);
+    });
 </script>
 </body>
 </html>
