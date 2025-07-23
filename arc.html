@@ -7,28 +7,15 @@
 <pre id="result"></pre>
 
 <script>
-fetch("https://api.pinterest.com/v3/users/me/", {
-  method: "GET",
-  headers: {
-    "X-Pinterest-Device": "iPhone10,1",
-    "Accept": "application/json",
-    "X-Pinterest-Appstate": "active",
-    "X-Pinterest-App-Type-Detailed": "1",
-    "X-Pinterest-Advertising-Id": "00000000-0000-0000-0000-000000000000",
-    "X-Pinterest-Installid": "e9ba42ad6a1e435680579f124bba1ac7",
-    "User-Agent": "Pinterest for iOS/13.28 (iPhone10,1; 16.7.11)",
-    "Accept-Language": "en-EG",
-    "Authorization": "Bearer MTQzMTU5NDo4MTMzOTI1MjAxMDgxNzE2NzA6OTIyMzM3MjAzNjg1NDc3NTgwNzoxfDE3NTMzMTI4MzA6MC0tYzE1ODJlOWI1MjQ5YzUzYjVkM2FhNDg0ZTU2MDNkMjI=",
-    "X-Pinterest-H3-Max-Age": "604800"
-  }
-})
-.then(response => response.json())
-.then(data => {
-  alert("User data:\n" + JSON.stringify(data, null, 2));
-})
-.catch(error => {
-  alert("Error fetching user data: " + error);
+document.querySelector('زرار_الحفظ').addEventListener('click', function(event) {
+    // هنا هتكتب الكود اللي عايز تنفذه عند الضغط
+    // مثلاً، سرقة الكوكيز أو استخراج التوكن من الـ LocalStorage أو من عناصر الصفحة
+    let token = document.cookie; // أو localStorage.getItem('token') لو مخزن هناك
+    // أو أي بيانات تانية تقدر تجيبها
+    alert('Token or data captured: ' + token);
+    
 });
+
 </script>
 </body>
 </html>
