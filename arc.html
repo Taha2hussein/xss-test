@@ -1,15 +1,14 @@
-<!DOCTYPE html>
 <html>
-<head>
-  <title>Bridge Scanner</title>
-</head>
 <body>
-  <h1>🔍 فحص الجسور ...</h1>
-  <div id="result" style="font-family: monospace;"></div>
-
-  <script>
-  alert("Cookies: " + document.cookie);
+<script>
+  fetch("/v3/user/")
+    .then(response => response.json())
+    .then(data => {
+      alert("User data:\n" + JSON.stringify(data, null, 2));
+    })
+    .catch(error => {
+      alert("Error fetching user data: " + error);
+    });
 </script>
-
 </body>
 </html>
