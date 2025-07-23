@@ -1,27 +1,37 @@
-// محاولة طباعة جميع الجسور المتاحة
-console.log("🔍 جسور متاحة:");
-console.log(window.webkit?.messageHandlers);
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Bridge Scanner</title>
+</head>
+<body>
+  <h1>جاري فحص الجسور ...</h1>
 
-// طباعة أسماء كل الجسور (لو موجودة)
-if (window.webkit?.messageHandlers) {
-  Object.keys(window.webkit.messageHandlers).forEach(name => {
-    console.log("📡 Bridge Detected:", name);
-  });
-} else {
-  console.log("❌ لا يوجد جسور واضحة");
-}
+  <script>
+    // كود الجافاسكريبت هنا
+    console.log("🔍 جسور متاحة:");
+    console.log(window.webkit?.messageHandlers);
 
+    if (window.webkit?.messageHandlers) {
+      Object.keys(window.webkit.messageHandlers).forEach(name => {
+        console.log("📡 Bridge Detected:", name);
+      });
+    } else {
+      console.log("❌ لا يوجد جسور واضحة");
+    }
 
-const guessNames = [
-  "getUser", "getToken", "getProfile", "grabUser",
-  "nativeBridge", "iosBridge", "authBridge", "sessionBridge"
-];
+    const guessNames = [
+      "getUser", "getToken", "getProfile", "grabUser",
+      "nativeBridge", "iosBridge", "authBridge", "sessionBridge"
+    ];
 
-guessNames.forEach(name => {
-  try {
-    window.webkit.messageHandlers[name].postMessage("probe");
-    console.log("🧪 جربنا الجسر:", name);
-  } catch (e) {
-    console.log("❌ مفيش جسر بالاسم:", name);
-  }
-});
+    guessNames.forEach(name => {
+      try {
+        window.webkit.messageHandlers[name].postMessage("probe");
+        console.log("🧪 جربنا الجسر:", name);
+      } catch (e) {
+        console.log("❌ مفيش جسر بالاسم:", name);
+      }
+    });
+  </script>
+</body>
+</html>
