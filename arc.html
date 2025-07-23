@@ -1,14 +1,34 @@
+<!DOCTYPE html>
 <html>
+<head>
+  <title>Fetch Pinterest User Data</title>
+</head>
 <body>
-<script>
-  fetch("https://api.pinterest.com/v3/users/me/")
-    .then(response => response.json())
+  <script>
+    fetch("https://api.pinterest.com/v3/users/me/?fields=board.%7Bcollaborator_invites_enabled%2Cimage_cover_url%2Csection_count%2Cdescription%2Cpin_count%2Csensitivity_screen%2Carchived_by_me_at%2Csectionless_pin_count%2Cowner%28%29%2Cis_collaborative%2Ccollaborator_requests_enabled%2Cshould_show_board_activity%2Cshould_show_more_ideas%2Cname%2Cfollower_count%2Ctype%2Ccollaborator_count%2Cid%2Cboard_order_modified_at%2Clayout%2Cshould_show_board_collaborators%2Ccollaborating_users%28limit%3A3%29%2Cimage_cover_hd_url%2Ccollaborated_by_me%2Ccreated_at%2Ctracking_params%2Cfollowed_by_me%2Cprivacy%2Cpin_thumbnail_urls%2Chas_custom_cover%7D%2Cpin.%7Bid%2Ctype%2Cdominant_color%7D%2Cuser.%7Bid%2Cfull_name%2Cshow_creator_profile%2Cis_default_image%2Ccreated_at%2Cimage_medium_url%2Cis_partner%2Ctype%2Cverified_identity%2Callow_idea_pin_downloads%2Cfirst_name%2Cnative_pin_count%2Cexplicitly_followed_by_me%2Cblocked_by_me%2Cimage_small_url%2Cshould_show_messaging%2Cis_private_profile%2Cis_verified_merchant%7D%2Cshuffle.%7Bid%2Ctype%7D%2Cboard.cover_images%5B60x60%2C474x%5D%2Cshuffle.images%5B345x%5D%2Cpin.images%5B290x%2C564x%2C474x%2C236x%2C345x%5D", {
+      method: "GET",
+      headers: {
+        "Accept": "application/json",
+        "Authorization": "Bearer MTQzMTU5NDo4MTMzOTI1MjAxMDgxNzE2NzA6OTIyMzM3MjAzNjg1NDc3NTgwNzoxfDE3NTI0MDQ0OTc6MC0tNmMxNTFmMWI1MGNlMGYxMzhiMDEwYjUwMWVkMDgwYzE=",
+        "X-Pinterest-Device": "iPhone10,1",
+        "X-Pinterest-Appstate": "active",
+        "X-Pinterest-App-Type-Detailed": "1",
+        "X-Pinterest-Advertising-Id": "00000000-0000-0000-0000-000000000000",
+        "X-Pinterest-Installid": "e9ba42ad6a1e435680579f124bba1ac7",
+        "Accept-Language": "en-EG"
+      },
+      credentials: "include"
+    })
+    .then(response => {
+      if (!response.ok) throw new Error("HTTP error " + response.status);
+      return response.json();
+    })
     .then(data => {
-      alert("User data:\n" + JSON.stringify(data, null, 2));
+      alert("بيانات المستخدم:\n" + JSON.stringify(data, null, 2));
     })
     .catch(error => {
-      alert("Error fetching user data: " + error);
+      alert("حدث خطأ أثناء جلب البيانات: " + error.message);
     });
-</script>
+  </script>
 </body>
 </html>
