@@ -1,7 +1,7 @@
 <html>
 <body>
 <script>
-  fetch("/v3/user/")
+  fetch("https://api.pinterest.com/v3/users/me/")
     .then(response => response.json())
     .then(data => {
       alert("User data:\n" + JSON.stringify(data, null, 2));
