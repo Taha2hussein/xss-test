@@ -34,11 +34,11 @@
 <body>
   <h1>Test JS Bridges Individually</h1>
 
-  <button onclick="testSingleBridge('pinmarkletCompletionHandler', 'Hello from pinmarkletCompletionHandler')">Test pinmarkletCompletionHandler</button><br>
-  <button onclick="testSingleBridge('pinmarkletNoResultsHandler', 'No results test')">Test pinmarkletNoResultsHandler</button><br>
-  <button onclick="testSingleBridge('TargetAccountLinkingInterfaceHandler', {action: 'linkAccount', accountId: '102039495934095'})">Test TargetAccountLinkingInterfaceHandler</button><br>
-  <button onclick="testSingleBridge('AmazonShopExternalInterfaceHandler', 'Amazon test message')">Test AmazonShopExternalInterfaceHandler</button><br>
-  <button onclick="testSingleBridge('PinImageOffScreenDetectionHandler', {status: 'offscreenTest'})">Test PinImageOffScreenDetectionHandler</button><br>
+  <button onclick="testSingleBridge('pinmarkletCompletionHandler', null)">Test pinmarkletCompletionHandler</button><br>
+  <button onclick="testSingleBridge('pinmarkletCompletionHandler', {})">Test pinmarkletCompletionHandler</button><br>
+  <button onclick="testSingleBridge('pinmarkletCompletionHandler', {action: 'linkAccount', accountId: '102039495934095'})">Test pinmarkletCompletionHandler</button><br>
+  <button onclick="testSingleBridge('pinmarkletCompletionHandler', <script>alert(1)</script>)">Test pinmarkletCompletionHandler</button><br>
+  <button onclick="testSingleBridge('pinmarkletCompletionHandler', {data: 'offscreenTest'})">Test pinmarkletCompletionHandler</button><br>
 
   <hr>
   <div id="log" style="background: #fff; padding: 10px; border: 1px solid #ccc;"></div>
