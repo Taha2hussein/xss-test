@@ -27,7 +27,7 @@
 
 
 
-<!-- <!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 <head>
   <title>Test JS Bridges Individually</title>
@@ -39,11 +39,11 @@
 <body>
   <h1>Test JS Bridges Individually</h1>
 
-  <button onclick="testSingleBridge('pinmarkletCompletionHandler', {data: '<script>alert(1)</script>'})">Test pinmarkletCompletionHandler</button><br>
-  <button onclick="testSingleBridge('pinmarkletCompletionHandler', {})">Test pinmarkletCompletionHandler</button><br>
-  <button onclick="testSingleBridge('pinmarkletCompletionHandler', {action: 'linkAccount', accountId: '102039495934095'})">Test pinmarkletCompletionHandler</button><br>
-  <button onclick="testSingleBridge('pinmarkletCompletionHandler', '<script>alert(1)</script>')">Test pinmarkletCompletionHandler</button><br>
-  <button onclick="testSingleBridge('pinmarkletCompletionHandler', {data: 'offscreenTest'})">Test pinmarkletCompletionHandler</button><br>
+  <button onclick="testSingleBridge('TargetAccountLinkingInterfaceHandler', {data: '<script>alert(1)</script>'})">Test TargetAccountLinkingInterfaceHandler</button><br>
+  <button onclick="testSingleBridge('TargetAccountLinkingInterfaceHandler', {})">Test TargetAccountLinkingInterfaceHandler</button><br>
+  <button onclick="testSingleBridge('TargetAccountLinkingInterfaceHandler', {action: 'linkAccount', accountId: '102039495934095'})">Test TargetAccountLinkingInterfaceHandler</button><br>
+  <button onclick="testSingleBridge('TargetAccountLinkingInterfaceHandler', '<script>alert(1)</script>')">Test TargetAccountLinkingInterfaceHandler</button><br>
+  <button onclick="testSingleBridge('TargetAccountLinkingInterfaceHandler', null)">Test TargetAccountLinkingInterfaceHandler</button><br>
 
   <hr>
   <div id="log" style="background: #fff; padding: 10px; border: 1px solid #ccc;"></div>
@@ -73,32 +73,6 @@
     }
   </script>
 </body>
-</html> -->
-
-
-<!DOCTYPE html>
-<html>
-<head><title>Save Image Test with base64</title></head>
-<body>
-
-<button onclick="saveImage()">Save Image</button>
-
-<script>
-function saveImage() {
-  try {
-    // صورة بيضاء شفافة 1x1 بكسل كـ base64
-    var smallTransparentImage = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR4nGNgYAAAAAMAASsJTYQAAAAASUVORK5CYII=";
-    
-    window.webkit.messageHandlers.pinmarkletCompletionHandler.postMessage({
-      action: "saveImage",
-      imageData: smallTransparentImage
-    });
-    alert("طلب حفظ الصورة تم إرساله");
-  } catch(e) {
-    alert("خطأ: " + e.message);
-  }
-}
-</script>
-
-</body>
 </html>
+
+
