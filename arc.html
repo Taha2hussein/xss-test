@@ -1,54 +1,17 @@
-<!-- <html>
-<body>
-<script>
-  // دالة تجيب بيانات المستخدم من API
-  fetch("https://api.pinterest.com/v3/users/me/")
-    .then(response => response.json())
-    .then(data => {
-      // عرض البيانات في رسالة تنبيه منسقة
-      alert("User data:\n" + JSON.stringify(data, null, 2));
-    })
-    .catch(error => {
-      alert("Error fetching user data: " + error);
-    });
-</script>
-</body>
-</html> -->
-
-
 <html>
 <body>
 <script>
-let pages = [
-  "/profile",
-  "/settings/account-settings/",
-  "/settings/privacy-and-data/"
-];
+console.log("Available bridges:");
+console.log(window.webkit?.messageHandlers);
 
-let i = 0;
-function next() {
-  if (i >= pages.length) return;
-
-  // نفتح الصفحة الحالية في iframe عشان نقدر نقرأ منها بيانات
-  let iframe = document.createElement("iframe");
-  iframe.style.display = "none"; // نخفيه
-  iframe.src = "https://www.pinterest.com" + pages[i];
-  document.body.appendChild(iframe);
-
-  iframe.onload = function() {
-    try {
-      // هنا تقدر تدخل على محتوى iframe لو نفس الدومين
-      let title = iframe.contentDocument.title || "No title";
-      alert("Page: " + pages[i] + "\nTitle: " + title);
-    } catch(e) {
-      alert("Can't access page: " + pages[i]);
-    }
-    document.body.removeChild(iframe);
-    i++;
-    setTimeout(next, 3000);
-  }
+if(window.webkit?.messageHandlers) {
+  Object.keys(window.webkit.messageHandlers).forEach(name => {
+    console.log("Found bridge:", name);
+  });
+} else {
+  console.log("No bridges detected.");
 }
-next();
+
 </script>
 </body>
 </html>
