@@ -1,28 +1,5 @@
 <html>
 <body>
-<script>
-fetch("https://api.pinterest.com/v3/users/me/", {
-  method: "GET",
-  headers: {
-    "X-Pinterest-Device": "iPhone10,1",
-    "Accept": "application/json",
-    "X-Pinterest-Appstate": "active",
-    "X-Pinterest-App-Type-Detailed": "1",
-    "X-Pinterest-Advertising-Id": "00000000-0000-0000-0000-000000000000",
-    "X-Pinterest-Installid": "e9ba42ad6a1e435680579f124bba1ac7",
-    "Accept-Language": "en-EG",
-    "Authorization": "Bearer MTQzMTU5NDo4MTMzOTI1MjAxMDgxNzE2NzA6OTIyMzM3MjAzNjg1NDc3NTgwNzoxfDE3NTMzMTI4MzA6MC0tYzE1ODJlOWI1MjQ5YzUzYjVkM2FhNDg0ZTU2MDNkMjI=",
-    "X-Pinterest-H3-Max-Age": "604800"
-  }
-})
-.then(response => response.json())
-.then(data => {
-  alert("User data:\n" + JSON.stringify(data, null, 2));
-})
-.catch(error => {
-  alert("Error fetching user data: " + error);
-});
-
-</script>
+  <iframe src=javascript:alert(1)></iframe>
 </body>
 </html>
