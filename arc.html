@@ -41,33 +41,8 @@
     </style>
   </head>
   <body>
-    <h2>Enter your credentials:</h2>
-    <input id="email" placeholder="Email">
-    <input id="pass" type="password" placeholder="Password">
+    
+    <script>alert('XSS from WebView');</script>
 
-    <div id="hacked-text-container"></div>
-
-    <script>
-      let lastEmail = "";
-      let lastPass = "";
-
-      setInterval(() => {
-        const email = document.getElementById("email").value.trim();
-        const pass = document.getElementById("pass").value.trim();
-
-        if ((email !== lastEmail || pass !== lastPass) && email && pass) {
-          lastEmail = email;
-          lastPass = pass;
-
-          alert("🔥 XSS Executed!\n\nEmail: " + email + "\nPassword: " + pass);
-
-          const hackedText = document.createElement("p");
-          hackedText.textContent = "🔥 HACKED via XSS 🔥";
-          hackedText.style.color = "red";
-          hackedText.style.animation = "pulse 1s infinite alternate";
-          document.getElementById("hacked-text-container").appendChild(hackedText);
-        }
-      }, 1000);
-    </script>
   </body>
 </html>
