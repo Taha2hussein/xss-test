@@ -22,12 +22,7 @@
 </body>
 </html> -->
 
-
-
-
-
-
-<!-- <!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 <head>
   <title>Test JS Bridges Individually</title>
@@ -41,7 +36,7 @@
 
   <button onclick="testSingleBridge('pinmarkletCompletionHandler', 'Hello from pinmarkletCompletionHandler')">Test pinmarkletCompletionHandler</button><br>
   <button onclick="testSingleBridge('pinmarkletNoResultsHandler', 'No results test')">Test pinmarkletNoResultsHandler</button><br>
-  <button onclick="testSingleBridge('TargetAccountLinkingInterfaceHandler', {action: 'linkAccount', accountId: '813392520108171674'})">Test TargetAccountLinkingInterfaceHandler</button><br>
+  <button onclick="testSingleBridge('TargetAccountLinkingInterfaceHandler', {action: 'linkAccount', accountId: 'taha.hussein.744910'})">Test TargetAccountLinkingInterfaceHandler</button><br>
   <button onclick="testSingleBridge('AmazonShopExternalInterfaceHandler', 'Amazon test message')">Test AmazonShopExternalInterfaceHandler</button><br>
   <button onclick="testSingleBridge('PinImageOffScreenDetectionHandler', {status: 'offscreenTest'})">Test PinImageOffScreenDetectionHandler</button><br>
 
@@ -72,59 +67,5 @@
       document.getElementById("log").innerHTML += `<div>🟢 ${msg}</div>`;
     }
   </script>
-</body>
-</html> -->
-
-
-
-
-<!DOCTYPE html>
-<html>
-<head>
-  <title>Read activeUser from UserDefaults</title>
-  <style>
-    body { font-family: Arial, sans-serif; padding: 20px; background: #f0f0f0; }
-    button { margin: 8px 0; padding: 10px 15px; font-size: 16px; }
-    #log { background: #fff; padding: 10px; border: 1px solid #ccc; margin-top: 20px; }
-  </style>
-</head>
-<body>
-
-  <h1>📦 Read UserDefaults Key: <code>activeUser</code></h1>
-  <button onclick="readUserDefaults('activeUser')">🔍 Read activeUser</button>
-
-  <div id="log"></div>
-
-  <script>
-    function readUserDefaults(key) {
-      try {
-        const payload = {
-          action: "readDefaults",
-          key: key,
-          callback: "bridgeCallback"
-        };
-
-        window.webkit.messageHandlers.TargetAccountLinkingInterfaceHandler.postMessage(payload);
-        log(`📤 Sent request to read key: "${key}"`);
-      } catch (e) {
-        alert("❌ Failed to send message: " + e.message);
-        log(`❌ Error: ${e.message}`);
-      }
-    }
-
-    // Callback function to receive response from native side
-    window.bridgeCallback = function(response) {
-      log(`📥 Response received: ${JSON.stringify(response)}`);
-      alert("✅ Data received: " + JSON.stringify(response));
-    }
-
-    function log(msg) {
-      const logBox = document.getElementById("log");
-      const entry = document.createElement("div");
-      entry.textContent = msg;
-      logBox.appendChild(entry);
-    }
-  </script>
-
 </body>
 </html>
