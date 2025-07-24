@@ -1,14 +1,23 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>XSS Proof of Concept</title>
-    
-  </head>
-  <body>
-    
-    <script>
-       alert(window.localStorage.getItem('u'));
-    </script>
+<head><title>Test JS Bridge</title></head>
+<body>
+  <h1>Test JS Bridge Messages</h1>
+  <button onclick="sendMessage()">Send Messages to Native</button>
 
-  </body>
+  <script>
+    function sendMessage() {
+      try {
+        window.webkit.messageHandlers.pinmarkletCompletionHandler.postMessage("Hello from JS");
+        window.webkit.messageHandlers.pinmarkletNoResultsHandler.postMessage("No results test");
+        window.webkit.messageHandlers.TargetAccountLinkingInterfaceHandler.postMessage({action: "test"});
+        window.webkit.messageHandlers.AmazonShopExternalInterfaceHandler.postMessage("Amazon test");
+        window.webkit.messageHandlers.PinImageOffScreenDetectionHandler.postMessage({status: "offscreen"});
+        alert("Messages sent!");
+      } catch (e) {
+        alert("Error sending message: " + e.message);
+      }
+    }
+  </script>
+</body>
 </html>
