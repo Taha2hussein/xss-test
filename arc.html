@@ -30,49 +30,40 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Test JS Bridges Individually</title>
+  <title>Test TargetAccountLinkingInterfaceHandler</title>
   <style>
-    body { font-family: Arial, sans-serif; padding: 20px; background: #f0f0f0; }
-    button { margin: 8px 0; padding: 10px 15px; font-size: 16px; }
+    button { margin: 6px; padding: 10px; font-size: 16px; }
+    body { font-family: sans-serif; background: #f0f0f0; padding: 20px; }
   </style>
 </head>
 <body>
-  <h1>Test JS Bridges Individually</h1>
 
-  <button onclick="testSingleBridge('TargetAccountLinkingInterfaceHandler', {data: '<script>alert(1)</script>'})">Test TargetAccountLinkingInterfaceHandler</button><br>
-  <button onclick="testSingleBridge('TargetAccountLinkingInterfaceHandler', {})">Test TargetAccountLinkingInterfaceHandler</button><br>
-  <button onclick="testSingleBridge('TargetAccountLinkingInterfaceHandler', {action: 'linkAccount', accountId: '102039495934095'})">Test TargetAccountLinkingInterfaceHandler</button><br>
-  <button onclick="testSingleBridge('TargetAccountLinkingInterfaceHandler', '<script>alert(1)</script>')">Test TargetAccountLinkingInterfaceHandler</button><br>
-  <button onclick="testSingleBridge('TargetAccountLinkingInterfaceHandler', null)">Test TargetAccountLinkingInterfaceHandler</button><br>
+<h2>Test TargetAccountLinkingInterfaceHandler</h2>
 
-  <hr>
-  <div id="log" style="background: #fff; padding: 10px; border: 1px solid #ccc;"></div>
+<button onclick="sendPayload(null)">Send: null</button><br>
+<button onclick="sendPayload({})">Send: {}</button><br>
+<button onclick="sendPayload({action: 'linkAccount'})">Send: linkAccount (بدون accountId)</button><br>
+<button onclick="sendPayload({action: 'linkAccount', accountId: '123'})">Send: linkAccount + accountId</button><br>
+<button onclick="sendPayload({action: 'testAction', foo: 'bar'})">Send: testAction + foo</button><br>
+<button onclick="sendPayload('<script>alert(1)</script>')">Send: <script>payload</script></button><br>
 
-  <script>
-    function testSingleBridge(bridgeName, message) {
-      try {
-        window.webkit.messageHandlers[bridgeName].postMessage(message);
-        alert(`Message sent to ${bridgeName}`);
+<hr>
+<div id="log" style="background:#fff; padding:10px; border:1px solid #ccc;"></div>
 
-        // سجل العملية في الصفحة
-        log(`Message sent to ${bridgeName}: ${JSON.stringify(message)}`);
-      } catch (e) {
-        alert(`Error sending message to ${bridgeName}: ${e.message}`);
-        log(`Error sending message to ${bridgeName}: ${e.message}`);
-      }
+<script>
+  function sendPayload(payload) {
+    try {
+      window.webkit.messageHandlers.TargetAccountLinkingInterfaceHandler.postMessage(payload);
+      log("✅ Sent: " + JSON.stringify(payload));
+    } catch (e) {
+      log("❌ Error: " + e.message);
     }
+  }
 
-    // Simulate receiving data from Native (لو حصل استجابة)
-    window.bridgeCallback = function(response) {
-      alert("Response from native: " + JSON.stringify(response));
-      log("Response from native: " + JSON.stringify(response));
-    }
+  function log(msg) {
+    document.getElementById("log").innerHTML += "<div>" + msg + "</div>";
+  }
+</script>
 
-    function log(msg) {
-      document.getElementById("log").innerHTML += `<div>🟢 ${msg}</div>`;
-    }
-  </script>
 </body>
 </html>
-
-
