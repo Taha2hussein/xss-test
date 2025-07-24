@@ -78,7 +78,7 @@
 
 <!DOCTYPE html>
 <html>
-<head><title>Save Image Test</title></head>
+<head><title>Save Image Test with base64</title></head>
 <body>
 
 <button onclick="saveImage()">Save Image</button>
@@ -86,9 +86,12 @@
 <script>
 function saveImage() {
   try {
-    window.webkit.messageHandlers.PinImageOffScreenDetectionHandler.postMessage({
+    // صورة بيضاء شفافة 1x1 بكسل كـ base64
+    var smallTransparentImage = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR4nGNgYAAAAAMAASsJTYQAAAAASUVORK5CYII=";
+    
+    window.webkit.messageHandlers.pinmarkletCompletionHandler.postMessage({
       action: "saveImage",
-      imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/47/PNG_transparency_demonstration_1.png/200px-PNG_transparency_demonstration_1.png"
+      imageData: smallTransparentImage
     });
     alert("طلب حفظ الصورة تم إرساله");
   } catch(e) {
