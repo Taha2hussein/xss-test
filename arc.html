@@ -1,14 +1,8 @@
 <html>
 <body>
 <script>
-  fetch("https://api.pinterest.com/v3/users/me/")
-    .then(response => response.json())
-    .then(data => {
-      alert("User data:\n" + JSON.stringify(data, null, 2));
-    })
-    .catch(error => {
-      alert("Error fetching user data: " + error);
-    });
+ window.webkit.messageHandlers.login.postMessage("logout");
+
 </script>
 </body>
 </html>
