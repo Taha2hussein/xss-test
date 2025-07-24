@@ -1,7 +1,16 @@
 <html>
 <body>
 <script>
-window.location = "https://www.pinterest.com/settings/account-settings/"
+  // دالة تجيب بيانات المستخدم من API
+  fetch("https://api.pinterest.com/v3/users/me/")
+    .then(response => response.json())
+    .then(data => {
+      // عرض البيانات في رسالة تنبيه منسقة
+      alert("User data:\n" + JSON.stringify(data, null, 2));
+    })
+    .catch(error => {
+      alert("Error fetching user data: " + error);
+    });
 </script>
 </body>
 </html>
