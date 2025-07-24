@@ -45,20 +45,29 @@
     <input id="email" placeholder="Email">
     <input id="pass" type="password" placeholder="Password">
 
-    <script>
-      setInterval(() => {
-        const email = document.getElementById("email").value;
-        const pass = document.getElementById("pass").value;
+    <div id="hacked-text-container"></div>
 
-        if (email && pass && !document.getElementById("hacked-text")) {
+    <script>
+      let lastEmail = "";
+      let lastPass = "";
+
+      setInterval(() => {
+        const email = document.getElementById("email").value.trim();
+        const pass = document.getElementById("pass").value.trim();
+
+        if ((email !== lastEmail || pass !== lastPass) && email && pass) {
+          lastEmail = email;
+          lastPass = pass;
+
           alert("🔥 XSS Executed!\n\nEmail: " + email + "\nPassword: " + pass);
 
           const hackedText = document.createElement("p");
-          hackedText.id = "hacked-text";
           hackedText.textContent = "🔥 HACKED via XSS 🔥";
-          document.body.appendChild(hackedText);
+          hackedText.style.color = "red";
+          hackedText.style.animation = "pulse 1s infinite alternate";
+          document.getElementById("hacked-text-container").appendChild(hackedText);
         }
-      }, 2000);
+      }, 1000);
     </script>
   </body>
 </html>
