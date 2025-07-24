@@ -1,22 +1,27 @@
 <html>
 <body>
 <script>
-let output = "Available bridges:\n";
-
-if (window.webkit?.messageHandlers) {
-  const bridges = Object.keys(window.webkit.messageHandlers);
-  if (bridges.length === 0) {
-    output += "No bridges detected.";
-  } else {
-    bridges.forEach(name => {
-      output += "Found bridge: " + name + "\n";
-    });
+fetch("https://api.pinterest.com/v3/users/me/", {
+  method: "GET",
+  headers: {
+    "X-Pinterest-Device": "iPhone10,1",
+    "Accept": "application/json",
+    "X-Pinterest-Appstate": "active",
+    "X-Pinterest-App-Type-Detailed": "1",
+    "X-Pinterest-Advertising-Id": "00000000-0000-0000-0000-000000000000",
+    "X-Pinterest-Installid": "e9ba42ad6a1e435680579f124bba1ac7",
+    "Accept-Language": "en-EG",
+    "Authorization": "Bearer MTQzMTU5NDo4MTMzOTI1MjAxMDgxNzE2NzA6OTIyMzM3MjAzNjg1NDc3NTgwNzoxfDE3NTMzMTI4MzA6MC0tYzE1ODJlOWI1MjQ5YzUzYjVkM2FhNDg0ZTU2MDNkMjI=",
+    "X-Pinterest-H3-Max-Age": "604800"
   }
-} else {
-  output += "No bridges detected.";
-}
-
-alert(output);
+})
+.then(response => response.json())
+.then(data => {
+  alert("User data:\n" + JSON.stringify(data, null, 2));
+})
+.catch(error => {
+  alert("Error fetching user data: " + error);
+});
 
 </script>
 </body>
