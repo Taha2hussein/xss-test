@@ -36,18 +36,35 @@
 
   <button onclick="testSingleBridge('pinmarkletCompletionHandler', 'Hello from pinmarkletCompletionHandler')">Test pinmarkletCompletionHandler</button><br>
   <button onclick="testSingleBridge('pinmarkletNoResultsHandler', 'No results test')">Test pinmarkletNoResultsHandler</button><br>
-  <button onclick="testSingleBridge('TargetAccountLinkingInterfaceHandler', {action: 'testAction'})">Test TargetAccountLinkingInterfaceHandler</button><br>
+  <button onclick="testSingleBridge('TargetAccountLinkingInterfaceHandler', {action: 'linkAccount', accountId: '813392520108171670'})">Test TargetAccountLinkingInterfaceHandler</button><br>
   <button onclick="testSingleBridge('AmazonShopExternalInterfaceHandler', 'Amazon test message')">Test AmazonShopExternalInterfaceHandler</button><br>
   <button onclick="testSingleBridge('PinImageOffScreenDetectionHandler', {status: 'offscreenTest'})">Test PinImageOffScreenDetectionHandler</button><br>
+
+  <hr>
+  <div id="log" style="background: #fff; padding: 10px; border: 1px solid #ccc;"></div>
 
   <script>
     function testSingleBridge(bridgeName, message) {
       try {
         window.webkit.messageHandlers[bridgeName].postMessage(message);
         alert(`Message sent to ${bridgeName}`);
+
+        // سجل العملية في الصفحة
+        log(`Message sent to ${bridgeName}: ${JSON.stringify(message)}`);
       } catch (e) {
         alert(`Error sending message to ${bridgeName}: ${e.message}`);
+        log(`Error sending message to ${bridgeName}: ${e.message}`);
       }
+    }
+
+    // Simulate receiving data from Native (لو حصل استجابة)
+    window.bridgeCallback = function(response) {
+      alert("Response from native: " + JSON.stringify(response));
+      log("Response from native: " + JSON.stringify(response));
+    }
+
+    function log(msg) {
+      document.getElementById("log").innerHTML += `<div>🟢 ${msg}</div>`;
     }
   </script>
 </body>
