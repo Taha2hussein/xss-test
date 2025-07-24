@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html>
 <head><title>Test JS Bridge</title></head>
 <body>
@@ -19,5 +19,25 @@
       }
     }
   </script>
+</body>
+</html> -->
+
+
+<!DOCTYPE html>
+<html>
+<head><title>Extract localStorage Data</title></head>
+<body>
+<script>
+  // قراءة القيمة من localStorage للملف activeUser
+  let data = localStorage.getItem('activeUser');
+
+  if (!data) {
+    data = 'No activeUser data found';
+  } else {
+     alert("data fetched");
+  }
+
+
+</script>
 </body>
 </html>
