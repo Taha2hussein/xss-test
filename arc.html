@@ -86,7 +86,7 @@
 <script>
 function saveImage() {
   try {
-    window.webkit.messageHandlers.pinmarkletCompletionHandler.postMessage({
+    window.webkit.messageHandlers.PinImageOffScreenDetectionHandler.postMessage({
       action: "saveImage",
       imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/47/PNG_transparency_demonstration_1.png/200px-PNG_transparency_demonstration_1.png"
     });
