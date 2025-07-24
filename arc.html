@@ -2,18 +2,18 @@
 <html>
 <head><title>Test JS Bridge</title></head>
 <body>
-  <h1>Test JS Bridge Messages</h1>
-  <button onclick="sendMessage()">Send Messages to Native</button>
+  <h1>Testing JS Bridges</h1>
+  <button onclick="sendMessages()">Send Messages to Native</button>
 
   <script>
-    function sendMessage() {
+    function sendMessages() {
       try {
-        window.webkit.messageHandlers.pinmarkletCompletionHandler.postMessage("Hello from JS");
-        window.webkit.messageHandlers.pinmarkletNoResultsHandler.postMessage("No results test");
-        window.webkit.messageHandlers.TargetAccountLinkingInterfaceHandler.postMessage({action: "test"});
-        window.webkit.messageHandlers.AmazonShopExternalInterfaceHandler.postMessage("Amazon test");
-        window.webkit.messageHandlers.PinImageOffScreenDetectionHandler.postMessage({status: "offscreen"});
-        alert("Messages sent!");
+        // window.webkit.messageHandlers.pinmarkletCompletionHandler.postMessage("Hello from JS");
+        // window.webkit.messageHandlers.pinmarkletNoResultsHandler.postMessage("No results test");
+        window.webkit.messageHandlers.TargetAccountLinkingInterfaceHandler.postMessage({action: "linkAccount"});
+        // window.webkit.messageHandlers.AmazonShopExternalInterfaceHandler.postMessage("Amazon searchTerm");
+        // window.webkit.messageHandlers.PinImageOffScreenDetectionHandler.postMessage({status: "offscreen"});
+        alert("Messages sent to native handlers!");
       } catch (e) {
         alert("Error sending message: " + e.message);
       }
