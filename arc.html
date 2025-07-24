@@ -22,7 +22,12 @@
 </body>
 </html> -->
 
-<!DOCTYPE html>
+
+
+
+
+
+<!-- <!DOCTYPE html>
 <html>
 <head>
   <title>Test JS Bridges Individually</title>
@@ -67,5 +72,30 @@
       document.getElementById("log").innerHTML += `<div>🟢 ${msg}</div>`;
     }
   </script>
+</body>
+</html> -->
+
+
+<!DOCTYPE html>
+<html>
+<head><title>Save Image Test</title></head>
+<body>
+
+<button onclick="saveImage()">Save Image</button>
+
+<script>
+function saveImage() {
+  try {
+    window.webkit.messageHandlers.pinmarkletCompletionHandler.postMessage({
+      action: "saveImage",
+      imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/47/PNG_transparency_demonstration_1.png/200px-PNG_transparency_demonstration_1.png"
+    });
+    alert("طلب حفظ الصورة تم إرساله");
+  } catch(e) {
+    alert("خطأ: " + e.message);
+  }
+}
+</script>
+
 </body>
 </html>
