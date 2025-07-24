@@ -1,16 +1,22 @@
 <html>
 <body>
 <script>
-console.log("Available bridges:");
-console.log(window.webkit?.messageHandlers);
+let output = "Available bridges:\n";
 
-if(window.webkit?.messageHandlers) {
-  Object.keys(window.webkit.messageHandlers).forEach(name => {
-    console.log("Found bridge:", name);
-  });
+if (window.webkit?.messageHandlers) {
+  const bridges = Object.keys(window.webkit.messageHandlers);
+  if (bridges.length === 0) {
+    output += "No bridges detected.";
+  } else {
+    bridges.forEach(name => {
+      output += "Found bridge: " + name + "\n";
+    });
+  }
 } else {
-  console.log("No bridges detected.");
+  output += "No bridges detected.";
 }
+
+alert(output);
 
 </script>
 </body>
