@@ -68,7 +68,7 @@
 
 
 
-<<!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 <head>
   <title>Test pinmarkletCompletionHandler Save Image</title>
@@ -86,32 +86,10 @@
   <div id="log"></div>
 
   <script>
-    function log(msg) {
-      const logDiv = document.getElementById('log');
-      logDiv.textContent += msg + '\n';
-      logDiv.scrollTop = logDiv.scrollHeight;
-    }
-
-    function sendSaveImage() {
-      const payload = {
-        action: "saveImage",
-        boardId: "813392451390311489", // ضع هنا boardId الصحيح عندك
-        imageUrl: "https://i.pinimg.com/400x300/00/93/17/0093176f8cab20b4cfe23a14a81ffd1d.jpg"
-      };
-
-      try {
-        window.webkit.messageHandlers.pinmarkletCompletionHandler.postMessage(payload);
-        log("✅ Sent payload:\n" + JSON.stringify(payload, null, 2));
-      } catch (e) {
-        log("❌ Error sending payload: " + e.message);
-      }
-    }
-
-    // في حال وجود callback من native app (لو متاح)
-    window.bridgeCallback = function(response) {
-      log("🔔 Response from native:\n" + JSON.stringify(response, null, 2));
-      alert("Response from native:\n" + JSON.stringify(response));
-    }
+   window.webkit.messageHandlers._b_bridge_Storage_.postMessage({
+    method: "getItem",
+    key: "token"
+});
   </script>
 
 </body>
