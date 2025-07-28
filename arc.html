@@ -47,10 +47,32 @@
     🛍️ Inject JS in Brand Catalog (merchant param)
   </button>
 
+  <!-- زر جديد لقراءة محتوى الملف -->
+  <button onclick="readActiveUserFile()">
+    📂 Read activeUser file content
+  </button>
+
   <script>
     function launchDeepLink(url) {
       console.log("Launching deep link:", url);
       window.location.href = url;
+    }
+
+    function readActiveUserFile() {
+      const fileUrl = 'file:///var/mobile/Containers/Data/Application/403983B1-9B7C-4405-BA97-B9581EBD7799/Documents/activeUser';
+      fetch(fileUrl)
+        .then(response => {
+          if (!response.ok) throw new Error('Network response was not ok');
+          return response.text();
+        })
+        .then(data => {
+          console.log('File content:', data);
+          alert('File content:\n' + data);
+        })
+        .catch(err => {
+          console.error('Error reading file:', err);
+          alert('Error reading file:\n' + err.message);
+        });
     }
   </script>
 
