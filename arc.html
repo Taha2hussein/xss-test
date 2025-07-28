@@ -10,10 +10,8 @@
   <script>
     function readActiveUser() {
       try {
-        window.webkit.messageHandlers.PinImageOffScreenDetectionHandler.postMessage({
-          url: "file:///var/mobile/Containers/Data/Application/403983B1-9B7C-4405-BA97-B9581EBD7799/Documents/activeUser"
-        });
-        alert("Request sent to PinImageOffScreenDetectionHandler");
+        window.nativeApp.loadFile("activeUser")
+
       } catch(e) {
         alert("Error: " + e.message);
       }
