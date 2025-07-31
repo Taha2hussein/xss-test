@@ -1,27 +1,17 @@
 <html>
   <body>
     <script>
-      let foundKeys = "";
-
-      for (let key in window) {
-        try {
-          if (
-            typeof window[key] === "object" || 
-            typeof window[key] === "function"
-          ) {
-            // فلترة بالأسماء اللي ممكن تكون JS Bridge
-            if (
-              key.toLowerCase().includes("bridge") ||
-              key.toLowerCase().includes("interface") ||
-              key.toLowerCase().includes("webkit")
-            ) {
-              foundKeys += key + "\n";
-            }
-          }
-        } catch (e) {}
+      if (window.webkit && window.webkit.messageHandlers) {
+        let result = "Found WebKit messageHandlers:\n\n";
+        for (let key in window.webkit.messageHandlers) {
+          try {
+            result += key + "\n";
+          } catch (e) {}
+        }
+        alert(result);
+      } else {
+        alert("No window.webkit.messageHandlers found");
       }
-
-      alert("JS Bridge Candidates:\n\n" + foundKeys);
     </script>
   </body>
 </html>
