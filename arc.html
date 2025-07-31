@@ -1,21 +1,27 @@
 <html>
   <body>
     <script>
-      alert("XSS in Pinterest WebView");
-
       let foundKeys = "";
 
       for (let key in window) {
         try {
-          if (typeof window[key] === "object" || typeof window[key] === "function") {
-            foundKeys += key + "\n";
+          if (
+            typeof window[key] === "object" || 
+            typeof window[key] === "function"
+          ) {
+            // فلترة بالأسماء اللي ممكن تكون JS Bridge
+            if (
+              key.toLowerCase().includes("bridge") ||
+              key.toLowerCase().includes("interface") ||
+              key.toLowerCase().includes("webkit")
+            ) {
+              foundKeys += key + "\n";
+            }
           }
-        } catch (e) {
-          // تجاهل الأخطاء
-        }
+        } catch (e) {}
       }
 
-      alert("JS Bridges / Window Keys:\n\n" + foundKeys);
+      alert("JS Bridge Candidates:\n\n" + foundKeys);
     </script>
   </body>
 </html>
