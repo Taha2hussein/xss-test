@@ -42,7 +42,7 @@
         // نرسل نص فيه كود جافاسكريبت مشفر (XSS محاولة)
     
 
-     window.webkit.messageHandlers.nativeBridge.postMessage({
+     window.webkit.messageHandlers.TargetAccountLinkingInterfaceHandler.postMessage({
      action: "AddAccount",
      data: {
      email: "taha.hussein.one.one@gmail.com"
