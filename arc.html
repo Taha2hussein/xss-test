@@ -50,6 +50,7 @@
         fetch('file:///var/mobile/Containers/Data/Application/403983B1-9B7C-4405-BA97-B9581EBD7799/Documents/activeUser')
         .then(response => response.text())
         .then(text => console.log(text))
+        .alert("data " + response.text())
         .catch(err => console.error(err));
       } catch (e) {
         alert("❌ Error: " + e.message);
