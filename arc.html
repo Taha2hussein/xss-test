@@ -79,31 +79,7 @@
     }
   </style>
 </head>
-<body>
-
-  <div class="login-container">
-    <h2>Login</h2>
-    <form onsubmit="handleSubmit(event)">
-      <input type="text" placeholder="Username" name="username" required />
-      <input type="password" placeholder="Password" name="password" required />
-      <button type="submit">Sign In</button>
-    </form>
-    <div class="footer">This is a test login form</div>
-  </div>
-
-  <script>
-  function handleSubmit(e) {
-    e.preventDefault();
-    
-    const form = e.target;
-    const username = form.username.value;
-    const password = form.password.value;
-
-    alert(`Username: ${username}\nPassword: ${password}`);
-    
-  }
+<script type="text/javascript">
+alert("kal");
 </script>
-
-
-</body>
 </html>
